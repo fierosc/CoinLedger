@@ -261,6 +261,40 @@
 
   .category-block { margin-bottom: 40px; }
 
+  /* A bold, hard-to-miss break between categories as you scroll — much
+     stronger than category-head's own hairline underline just below,
+     which only separates a title from its own methods. This one marks
+     the transition itself: a wide gold-tapered rule with a diamond
+     ornament (echoing the ◈ brand mark), with real padding around it so
+     it can't be mistaken for one of the row dividers. Skipped on the
+     very first category block — nothing above it to separate from. */
+  .category-block + .category-block {
+    position: relative;
+    padding-top: 46px;
+  }
+  .category-block + .category-block::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    opacity: 0.6;
+  }
+  .category-block + .category-block::after {
+    content: "◈";
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    padding: 0 16px;
+    color: var(--gold);
+    font-size: 15px;
+    line-height: 1;
+  }
+
   .category-head {
     display: flex;
     align-items: baseline;
