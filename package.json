@@ -1,0 +1,10 @@
+{
+  "name": "coin-ledger-site",
+  "private": true,
+  "scripts": {
+    "prerender": "node prerender.js Last.html dist/index.html"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}
