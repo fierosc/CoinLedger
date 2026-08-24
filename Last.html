@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Coin Ledger — Evolved PWI Moneymaking Wiki</title>
+<meta name="description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game — dungeons, mold farming, Event Gold, and more, with sourced drop rates and rewards.">
+<meta name="robots" content="index, follow">
+<!-- Replace with your actual published domain before going live. -->
+<link rel="canonical" href="https://REPLACE-WITH-YOUR-DOMAIN.com/">
+<meta name="theme-color" content="#14161F">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Coin Ledger — Evolved PWI Moneymaking Wiki">
+<meta property="og:description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game.">
+<meta property="og:url" content="https://REPLACE-WITH-YOUR-DOMAIN.com/">
+<meta property="og:site_name" content="The Coin Ledger">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Coin Ledger — Evolved PWI Moneymaking Wiki">
+<meta name="twitter:description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "The Coin Ledger",
+  "alternateName": "Evolved PWI Moneymaking Wiki",
+  "description": "A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game.",
+  "url": "https://REPLACE-WITH-YOUR-DOMAIN.com/"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14161F;
+    --bg-alt: #1A1D29;
+    --panel: #1F2330;
+    --panel-hover: #262B3B;
+    --rule: #333850;
+    --rule-soft: #262A38;
+    --gold: #C89B4A;
+    --gold-bright: #E3BD73;
+    --jade: #4E9B86;
+    --bronze: #B5722E;
+    --text: #ECE8DD;
+    --text-dim: #9498A8;
+    --text-faint: #656B80;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(200,155,74,0.07), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 10%, rgba(78,155,134,0.05), transparent);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(20,22,31,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 20px 14px;
+  }
+
+  .topbar-actions {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 20;
+  }
+
+  .ref-btn, .rates-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .ref-btn:hover, .rates-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+
+  .ref-panel {
+    display: none;
+    position: absolute;
+    top: 46px;
+    right: 20px;
+    width: 260px;
+    max-width: calc(100vw - 40px);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .ref-panel.open { display: block; }
+  .ref-panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .ref-item { margin-bottom: 8px; }
+  .ref-item:last-child { margin-bottom: 0; }
+  .ref-item a {
+    display: block;
+    font-size: 12.5px;
+    color: var(--text);
+    text-decoration: none;
+    line-height: 1.4;
+  }
+  .ref-item a:hover { color: var(--gold-bright); }
+  .ref-item .ref-domain {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    display: block;
+    margin-top: 1px;
+  }
+  .ref-credit {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    text-align: center;
+  }
+  .ref-credit .credit-main {
+    font-size: 10px;
+    color: var(--text-faint);
+    letter-spacing: 0.02em;
+  }
+  .ref-credit .credit-sub {
+    font-size: 9px;
+    color: var(--text-faint);
+    opacity: 0.55;
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+
+  .rate-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 12.5px;
+  }
+  .rate-item:last-of-type { border-bottom: none; }
+  .rate-pair { color: var(--text-dim); }
+  .rate-value {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--gold-bright);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .rates-updated {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+
+  .topbar-inner { max-width: 980px; margin: 0 auto; }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .brand .mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.01em;
+    color: var(--gold-bright);
+    cursor: pointer;
+  }
+
+  .brand .mark::before {
+    content: "◈ ";
+    color: var(--gold);
+  }
+
+  .brand .mark:hover {
+    color: var(--gold-bright);
+  }
+  .brand .mark:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .search {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .search::placeholder { color: var(--text-faint); }
+  .search:focus { outline: none; border-color: var(--gold); }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .chip.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #14161F;
+    font-weight: 500;
+  }
+
+  .filter-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    align-self: center;
+    margin-right: 2px;
+  }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  .category-block { margin-bottom: 40px; }
+
+  .category-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .category-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 19px;
+    margin: 0;
+    color: var(--text);
+  }
+
+  .category-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  .entry-table { width: 100%; border-collapse: collapse; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1.8fr 0.6fr 0.7fr 1fr 1.3fr;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 10px;
+    border-radius: 6px;
+    transition: background 0.12s ease;
+  }
+  .row:hover { background: var(--panel); }
+  .row + .row { border-top: 1px solid var(--rule-soft); }
+
+  .row.head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    padding-bottom: 8px;
+  }
+  .row.head:hover { background: none; }
+
+  .col-name { font-weight: 500; font-size: 14px; }
+  .name-abbr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-faint);
+    margin-left: 4px;
+  }
+  .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-location {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+  .col-notes { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; }
+  .col-title { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; }
+
+  .reward-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .reward-total-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    margin-bottom: 3px;
+  }
+  .reward-chip {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.5;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-soft);
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .reward-chip.reward-chip-gold {
+    border-color: var(--gold);
+    background: rgba(200,155,74,0.1);
+    color: var(--gold-bright);
+    font-weight: 500;
+  }
+  .reward-chip.reward-chip-more {
+    border-style: dashed;
+    color: var(--text-faint);
+    font-style: italic;
+    cursor: default;
+  }
+
+  .empty-state {
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 13px;
+    background: var(--bg-alt);
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-faint);
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+  }
+
+  .row.clickable { cursor: pointer; }
+  .row.clickable:hover .col-name { color: var(--gold-bright); }
+
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,11,16,0.7);
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal-panel {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    max-width: 440px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 22px;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+  }
+  .modal-close:hover { color: var(--gold-bright); }
+
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--gold-bright);
+    margin: 0 0 4px;
+    padding-right: 24px;
+  }
+  .modal-title-abbr {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-faint);
+    margin-left: 6px;
+  }
+
+  .modal-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 18px;
+  }
+
+  .modal-field { margin-bottom: 14px; }
+  .modal-field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 3px;
+  }
+  .modal-field-value { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+  .modal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 8px 14px;
+    background: rgba(200,155,74,0.12);
+    border: 1px solid rgba(200,155,74,0.4);
+    border-radius: 6px;
+    color: var(--gold-bright);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .modal-link:hover { background: rgba(200,155,74,0.22); }
+
+  .task-list { display: flex; flex-direction: column; gap: 8px; }
+  .task-row {
+    background: var(--bg-alt);
+    border: 1px solid var(--rule-soft);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .task-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gold-bright);
+    font-weight: 500;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .task-kills { color: var(--text-faint); font-weight: 400; }
+  .task-rewards { font-size: 12.5px; color: var(--text-dim); line-height: 1.4; }
+
+  @media (max-width: 700px) {
+    .row { grid-template-columns: 1fr; gap: 4px; padding: 14px 12px; }
+    .row.head { display: none; }
+    .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-notes, .col-title, .col-location { font-size: 12px; }
+    .col-level::before { content: "Level  "; color: var(--text-faint); }
+    .col-reward::before { content: "Reward  "; color: var(--text-faint); }
+    .col-boss::before { content: "Boss/Mob  "; color: var(--text-faint); }
+    .col-freq::before { content: "Freq  "; color: var(--text-faint); }
+    .col-drop::before { content: "Drop Chance  "; color: var(--text-faint); }
+    .col-title::before { content: "Title - "; color: var(--text-faint); }
+    .col-freq::before { content: "Freq  "; color: var(--text-faint); }
+    .col-location::before { content: "Location  "; color: var(--text-faint); }
+    .col-notes { margin-top: 2px; }
+    .col-title { margin-top: 2px; }
+    .row { border: 1px solid var(--rule-soft); margin-bottom: 8px; border-radius: 8px; }
+    .row + .row { border-top: 1px solid var(--rule-soft); }
+
+    /* Buttons were absolutely positioned over the brand title on narrow
+       screens (title text is long enough to run under them). On mobile,
+       drop them into normal flow directly below the title instead, with as
+       little gap as possible, so there's no overlap regardless of title
+       length. */
+    .brand { margin-bottom: 6px; }
+    .topbar-actions {
+      position: static;
+      justify-content: flex-start;
+      margin-bottom: 12px;
+    }
+    .ref-panel { top: 80px; }
+  }
+
+  /* ---- LANDING PAGE ---- */
+  .landing {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(200,155,74,0.09), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 10%, rgba(78,155,134,0.07), transparent);
+  }
+  .landing.hidden { display: none; }
+  .landing-inner { text-align: center; max-width: 460px; }
+  .landing-mark {
+    font-size: 34px;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .landing-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 38px;
+    color: var(--gold-bright);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+  }
+  .landing-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .landing-tagline {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .landing-stats {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 34px;
+  }
+  .landing-enter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 12px 30px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .landing-enter:hover { background: var(--gold); color: #14161F; }
+  .landing-enter:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* app content is hidden behind the landing page until "Enter" is clicked */
+  .app-shell.hidden { display: none; }
+
+  /* ---- RATES PAGE ---- */
+  .rates-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(200,155,74,0.09), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 10%, rgba(78,155,134,0.07), transparent);
+  }
+  .rates-page.hidden { display: none; }
+  .rates-page-inner { text-align: center; max-width: 420px; width: 100%; }
+  .rates-page-mark { font-size: 34px; color: var(--gold); margin-bottom: 14px; }
+  .rates-page-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 34px;
+    color: var(--gold-bright);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+  }
+  .rates-page-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 28px;
+  }
+  .rates-page-list {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 4px 16px;
+    margin-bottom: 16px;
+  }
+  .rates-page-updated {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+  .rates-page-note {
+    font-size: 12px;
+    color: var(--text-faint);
+    line-height: 1.5;
+    text-align: left;
+    margin-bottom: 28px;
+  }
+  .rates-page-back {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 12px 30px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .rates-page-back:hover { background: var(--gold); color: #14161F; }
+  .rates-page-back:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<div class="landing" id="landing">
+  <div class="landing-inner">
+    <div class="landing-mark">◈</div>
+    <h1 class="landing-title">The Coin Ledger</h1>
+    <div class="landing-sub">EVOLVED PWI</div>
+    <div class="landing-tagline">Every way to make Coin in Evolved PWI, cataloged — early game to late.</div>
+    <div class="landing-stats" id="landingStats"></div>
+    <button class="landing-enter" id="enterBtn">Enter the Ledger →</button>
+  </div>
+</div>
+
+<div class="app-shell hidden" id="appShell">
+
+<div class="topbar">
+  <div class="ref-panel" id="refPanel"></div>
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="mark" id="brandHome" role="button" tabindex="0">The Coin Ledger</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="rates-btn" id="ratesBtn">💱 Rates</button>
+      <button class="ref-btn" id="refBtn">📚 References</button>
+    </div>
+    <input class="search" id="search" type="text" placeholder="Search methods…" />
+    <div class="filter-row" id="sortFilters" style="margin-top: 8px;">
+      <span class="filter-label">Sort:</span>
+      <button class="chip active" data-sort="default">Default</button>
+      <button class="chip" data-sort="name">Name A–Z</button>
+      <button class="chip" data-sort="location">Location</button>
+      <!-- Value (Coin) sort removed — computed Coin totals rely on
+           market rates that drift, so they're no longer shown or
+           sortable. Rewards are shown as stated (EG/items/Coin) and
+           left for the player to judge. -->
+      <!-- Reward sort button removed for now (kept the logic in sortEntries()
+           and the "reward" branch below it — re-add this button whenever
+           it's wanted back, no other code changes needed):
+      <button class="chip" data-sort="reward">Reward (EG, low–high)</button>
+      -->
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="filter-row" id="categoryFilters" style="margin-bottom: 20px;"></div>
+  <div id="content"></div>
+</main>
+
+</div>
+
+<div class="rates-page hidden" id="ratesPage">
+  <div class="rates-page-inner">
+    <div class="rates-page-mark">💱</div>
+    <h2 class="rates-page-title">Exchange Rates</h2>
+    <div class="rates-page-sub">EVOLVED PWI</div>
+    <div class="rates-page-list" id="ratesPageList"></div>
+    <div class="rates-page-updated" id="ratesPageUpdated"></div>
+    <div class="rates-page-note">Drop % figures on this site are pulled from pwdatabase, which lists retail (official server) drop rates. PWI's actual drop process happens in three separate stages. First, a gate based on the level gap between you and the monster decides whether anything drops at all from that kill. Second, if that passes, the server rolls how many items drop, usually 0 to 3, though bosses can repeat this roll several times and drop far more. Third, the server rolls which specific item fills each of those drop slots, chosen from everything on that monster's loot table. That third roll is the percentage pwdatabase and this site actually show. This server runs a 2x drop rate, but that multiplier only touches part of this chain rather than the final number directly. It can't be applied by simply doubling the listed percentage. Actual in-game odds run better than what's shown here, though not a clean 2x.</div>
+    <button class="rates-page-back" id="ratesBackBtn">← Back to the Ledger</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-panel" id="modalPanel"></div>
+</div>
+
+<script>
+// ============================================================================
+// DATA
+// ============================================================================
+//
+// Each entry object:
+//   name    - string, method/item name
+//   abbr    - OPTIONAL string, the server's common shorthand for this entry
+//             (e.g. "FWS" for Warsong City). Only ever displayed in the
+//             Dungeons/Instances category (row + modal title), shown smaller
+//             in parentheses next to the name — other categories that share
+//             the same entry object (e.g. Event Gold) never show it. Also
+//             included in search matching.
+//   stages  - array of "E" | "M" | "L" (early/mid/late game). Not currently
+//             used for filtering (removed for now), kept for future use.
+//   level   - string, level requirement or "—" if not applicable
+//   reward  - string, what you get (human-readable, shown in the table/modal)
+//   egValue - number | null. The single Event-Gold-equivalent number the
+//             "Reward" sort compares on. This is the ONLY thing that sort
+//             reads — it never re-parses the `reward` text. Set it explicitly
+//             on every entry:
+//               - a fixed EG reward -> that number (e.g. 5.5)
+//               - a range/cap ("up to N", "1–10 by rank") -> the upper bound
+//               - a multi-task chain -> the summed EG across all tasks
+//               - a pure item-drop reward with no EG figure (gear, mats,
+//                 mystery boxes) -> null. Null entries aren't "worth less" —
+//                 they're simply not EG-denominated, so they're unranked and
+//                 sort separately from the numeric ones (see sortEntries).
+//   freq    - string, how often it can be done
+//   notes   - string, freeform detail (can be "")
+//   link    - OPTIONAL string, source URL (add matching entry to REFERENCES below)
+//   tasks   - OPTIONAL array of {task, kills, rewards[]} for multi-step quest chains
+//
+// HOW TO ADD A NEW CATEGORY (read this before editing):
+//   1. Add a new `const X_ENTRIES = [ ... ];` block below, fully self-contained
+//      with its own opening `[` and closing `];` — do NOT add it inside another
+//      category's array.
+//   2. Register it in the CATEGORIES array at the bottom of this section.
+//   3. Run this file in a browser (or `node --check`) after editing — a missing
+//      bracket in one category can no longer corrupt another category's data,
+//      but it will still break that category's block, so always verify.
+//   4. validateCategories() runs automatically on load and logs warnings to the
+//      browser console (F12) for common mistakes (missing fields).
+//   5. If something does break, the page now shows a visible on-screen error
+//      instead of a blank page — see the "ERROR HANDLING" section further down.
+
+// Shared task breakdown for the Icebound Underworld quest chain.
+// Referenced by the single shared ICEBOUND_UNDERWORLD_ENTRY below.
+const ICEBOUND_UNDERWORLD_TASKS = [
+  { task: 1, kills: 2, rewards: ["5x Event Gold", "5x Evolved Engrave Stones", "2x Immortal Gift Packs"] },
+  { task: 2, kills: 3, rewards: ["10x Event Gold", "10x Evolved Engrave Stones", "5x Immortal Gift Packs"] },
+  { task: 3, kills: 7, rewards: ["20x Event Gold", "20x Evolved Engrave Stones", "10x Immortal Gift Packs"] },
+  { task: 4, kills: 10, rewards: ["30x Event Gold", "30x Evolved Engrave Stones", "20x Immortal Gift Packs"] },
+  { task: 5, kills: 15, rewards: ["50x Evolved Engrave Stones", "50x Immortal Gift Packs", "1x Weapon Fashion Pack (Pixel Theme)"] },
+  { task: 6, kills: 25, rewards: ["Glyph Lv.8 – choose color (Untradeable)", "75x Evolved Engrave Stones", "75x Immortal Gift Packs"] },
+];
+
+// Icebound Underworld is both an Event Gold source AND a dungeon-style quest
+// chain, so it's listed in two categories below. Defined ONCE here and
+// referenced by both category arrays (instead of copy-pasted) so editing it
+// in one place always updates it everywhere it appears.
+const ICEBOUND_UNDERWORLD_ENTRY = {
+  name: "Icebound Underworld",
+  abbr: "IBU",
+  stages: ["M"],
+  level: "100+, R2 + SS1",
+  // FLAGGED: this used to say "up to 20 EG", but ICEBOUND_UNDERWORLD_TASKS
+  // above shows EG on tasks 1-4 (5+10+20+30), which sums to 65, not 20.
+  // egValue and this text now use that 65 total — please confirm against
+  // the linked source and correct if the task breakdown itself is wrong.
+  reward: "6-task chain: 65 EG total (tasks 1–4) + Evolved Engrave Stones, Immortal Gift Packs, Weapon Fashion Pack, Glyph Lv.8",
+  egValue: 65,
+  freq: "Quest chain — boss per task is randomized, each task harder than the last",
+  notes: "Access via Icebound Gatekeeper Sho, Archosaur City (West district). Quest cannot be trashed. Rewards based on Theater of Blood items.",
+  link: "https://evolvedpw.com/database/article/icebound-underworld-quest",
+  tasks: ICEBOUND_UNDERWORLD_TASKS,
+};
+
+// Same idea as above: Uncharted Paradise is both an Event Gold source and a
+// squad dungeon. Defined ONCE and referenced by both category arrays.
+const UNCHARTED_PARADISE_TASKS = [
+  { task: 1, kills: 2, rewards: ["5x Event Gold", "1x Lord of Paradise's Mount Cage", "2x Magic Stick Pack", "20x Primordial Blood", "2x Barbaric Blood"] },
+  { task: 2, kills: 5, rewards: ["15x Event Gold", "4x Medium Magic Stick Pack", "2x Lord of Paradise Fragment Pack", "8x Evolved Vitae Pills", "35x Primordial Blood", "2x Barbaric Blood"] },
+  { task: 3, kills: 10, rewards: ["30x Event Gold", "6x Large Magic Stick Pack", "3x Lord of Paradise Fragment Pack", "15x Evolved Vitae Pills", "70x Primordial Blood", "4x Barbaric Blood"] },
+  { task: 4, kills: 15, rewards: ["10x Cubi Gold", "2x Lord of Paradise's Mount Cage", "3x Magic Stick Pack", "3x Medium Magic Stick Pack", "3x Large Magic Stick Pack", "20x Evolved Vitae Pills", "80x Primordial Blood", "5x Barbaric Blood"] },
+];
+const UNCHARTED_PARADISE_ENTRY = {
+  name: "Uncharted Paradise",
+  abbr: "UP",
+  stages: ["M"],
+  level: "90+",
+  reward: "4-quest chain: 50 EG total (Q1–Q3) + Cubi Gold (Q4) + 1x Glyph Pack Lv.4 (daily)",
+  egValue: 50,
+  freq: "Daily",
+  notes: "10-man squad; quest 'Lord of Paradise', kill end boss.",
+  tasks: UNCHARTED_PARADISE_TASKS,
+};
+
+// Same idea again: Molten Mines Lv.1/Lv.2 and Undiscovered Dungeon are each
+// both an Event Gold source and a squad dungeon. Defined ONCE and
+// referenced by both category arrays.
+const MOLTEN_MINES_1_ENTRY = {
+  name: "Molten Mines Lv.1",
+  abbr: "MM",
+  stages: ["M"],
+  level: "90+",
+  reward: "5.5 EG",
+  egValue: 5.5,
+  freq: "Daily",
+  notes: "10-man squad",
+};
+const MOLTEN_MINES_2_ENTRY = {
+  name: "Molten Mines Lv.2",
+  abbr: "MM2",
+  stages: ["M"],
+  level: "90+",
+  reward: "7.5 EG",
+  egValue: 7.5,
+  freq: "Daily",
+  notes: "10-man squad",
+};
+const UNDISCOVERED_DUNGEON_ENTRY = {
+  name: "Undiscovered Dungeon",
+  abbr: "UDC",
+  stages: ["M"],
+  level: "100+",
+  reward: "28 EG",
+  egValue: 28,
+  freq: "Daily",
+  notes: "8-man squad",
+};
+const WARSONG_CITY_ENTRY = {
+  name: "Warsong City",
+  abbr: "FWS",
+  stages: ["M"],
+  level: "85+",
+  reward: "1 EG per run + R9 molds + Warsong Medals",
+  egValue: 1,
+  // FLAGGED: no rewardItems here yet — the R9 mold drop is random (which
+  // mold, how many per run) and Warsong Medals have no stated per-run
+  // quantity, so there's nothing reliable to structure. That means this
+  // entry's Value badge (currently ~17.5M Coin, from the flat 1 EG alone)
+  // is a significant undercount — the R9 mold alone is noted below at
+  // ~20 Cubi Gold (~6B Coin). Add rewardItems once you have per-run
+  // quantities to attach.
+  freq: "Up to 3x/day",
+  notes: "Auto-attach quest on entry. Assassin Dagger R9 mold worth ~20c (cubi gold).",
+};
+
+// Same idea again: Endless Universe is both an Event Gold source and a
+// squad dungeon. Defined ONCE and referenced by both category arrays.
+const ENDLESS_UNIVERSE_ENTRY = {
+  name: "Endless Universe",
+  abbr: "EU",
+  stages: ["M"],
+  level: "95+",
+  reward: "5 EG",
+  egValue: 5,
+  freq: "1x/day (EG reward)",
+  notes: "8–10 squad, full clear required. Capped by stackable Toxin items, not a daily lockout.",
+};
+
+// ----------------------------------------------------------------------------
+// EVENT GOLD
+// ----------------------------------------------------------------------------
+const EVENT_GOLD_ENTRIES = [
+  {
+    name: "Voting",
+    stages: ["E"],
+    level: "Any",
+    reward: "EG (varies)",
+    egValue: null, // amount depends which sites are up; no fixed number
+    freq: "Daily (4 sites)",
+    notes: "Register on site, vote 4 partner sites, claim in-game",
+  },
+  {
+    name: "Active Play (Gold Box)",
+    stages: ["E"],
+    level: "30+",
+    reward: "2 EG",
+    egValue: 2,
+    freq: "Every 6 hrs",
+    notes: "Automatic while online",
+  },
+  {
+    name: "Dragon Quests",
+    stages: ["E"],
+    level: "19+",
+    reward: "10 Gold 50 Silver (Fu Chih)",
+    egValue: null, // no flat number — depends on character level
+    freq: "Up to 3x/day",
+    notesShort: "Requires prerequisite chain (see details)",
+    notes: "Requires a prerequisite quest chain first — Love of Dragon Quest, obtainable at any level (server custom change), starting at Mr. Yeh (525, 619). Each bracket below is daily and pays Coin; EG reward on Dragon Quests itself scales with the level of the quest received.",
+    link: "https://www.pwdatabase.com/pwi/quest/4848",
+    breakdown: [
+      { task: 1, title: "Chiu Niu (Lv.20–30)", rewards: ["25 Silver"] },
+      { task: 2, title: "Yatzu (Lv.31–40)", rewards: ["50 Silver"] },
+      { task: 3, title: "Chaofeng (Lv.41–50)", rewards: ["1 Gold"] },
+      { task: 4, title: "Pulao (Lv.51–60)", rewards: ["1 Gold 50 Silver"] },
+      { task: 5, title: "Suanni (Lv.61–70)", rewards: ["2 Gold"] },
+      { task: 6, title: "Pahsia (Lv.71–80)", rewards: ["2 Gold 50 Silver"] },
+      { task: 7, title: "Hsianchang (Lv.81–90)", rewards: ["3 Gold"] },
+      { task: 8, title: "Fu Chih (Lv.91–105)", rewards: ["3 Gold 50 Silver"] },
+    ],
+  },
+  ENDLESS_UNIVERSE_ENTRY,
+  {
+    name: "Jungle Ruins",
+    stages: ["E"],
+    level: "30+",
+    reward: "Up to 11 EG",
+    egValue: 11, // upper bound of the range
+    freq: "1x/day",
+    notes: "Speed/decision-based, automated event",
+  },
+  {
+    name: "Sunset Valley (Tank Wars)",
+    stages: ["E"],
+    level: "100+",
+    reward: "Tokens → EG (1–10 by rank)",
+    egValue: 10, // upper bound of the range (top rank)
+    freq: "Ranked event",
+    notes: "",
+  },
+  {
+    name: "Celestial Tiger Event",
+    stages: ["E"],
+    level: "30+",
+    reward: "1–10 EG (top 6)",
+    egValue: 10, // upper bound of the range (1st place)
+    freq: "Mondays",
+    notes: "",
+  },
+  MOLTEN_MINES_1_ENTRY,
+  MOLTEN_MINES_2_ENTRY,
+  WARSONG_CITY_ENTRY,
+  {
+    name: "Cultivation Quest-Chain",
+    stages: ["M", "L"],
+    level: "19+",
+    reward: "~21.35 EG total",
+    egValue: 21.35,
+    freq: "One-time",
+    notes: "Base chain + Sage/Demon branch",
+  },
+  UNDISCOVERED_DUNGEON_ENTRY,
+  UNCHARTED_PARADISE_ENTRY,
+  ICEBOUND_UNDERWORLD_ENTRY,
+];
+// ---- end EVENT_GOLD_ENTRIES ----
+
+// ----------------------------------------------------------------------------
+// DUNGEONS / INSTANCES
+// ----------------------------------------------------------------------------
+const DUNGEONS_INSTANCES_ENTRIES = [
+  {
+    name: "Flowsilver Palace — Judgment Mode",
+    abbr: "JFSP",
+    stages: ["L"],
+    level: "100+, Reawakened 1x, Arcane Sky I",
+    reward: "Flowsilver Princess Treasure (5x Ultimate Refine Orb, 2x Flowsilver Emblem, 20x Fortification Essence, 5x General Summer Token, 5x Glyph Pack Lv.3) + 5x Basic Badge",
+    egValue: null, // pure item/mat drops, no EG figure attached
+    // Item breakdown for the reward text above (kept for reference).
+    rewardItems: [
+      { name: "Ultimate Refine Orb", qty: 5 },
+      { name: "Flowsilver Emblem", qty: 2 },
+      { name: "Fortification Essence", qty: 20 },
+      { name: "General Summer Token", qty: 5 },
+      { name: "Glyph Pack Lv.3", qty: 5 },
+      { name: "Basic Badge", qty: 5 },
+    ],
+    freq: "Unlimited entries; daily quest 1x/day",
+    notes: "",
+    link: "https://evolvedpw.com/database/article/flowsilver-palace",
+  },
+  ICEBOUND_UNDERWORLD_ENTRY,
+  UNCHARTED_PARADISE_ENTRY,
+  MOLTEN_MINES_1_ENTRY,
+  MOLTEN_MINES_2_ENTRY,
+  UNDISCOVERED_DUNGEON_ENTRY,
+  WARSONG_CITY_ENTRY,
+  ENDLESS_UNIVERSE_ENTRY,
+];
+// ---- end DUNGEONS_INSTANCES_ENTRIES ----
+
+// ----------------------------------------------------------------------------
+// MOLD FARMING
+// ----------------------------------------------------------------------------
+// NOTE ON TITLES: the "Legendary <X>" title text in each entry's notes field
+// (e.g. "Legendary Sword Master", "Legendary Wizard", "Legendary Assassin")
+// is correct as-is — these are distinct titles per weapon type, all filed
+// under the broader "Legendary Weaponry" title category, but each one's own
+// specific name IS the weapon-type-specific text, not the literal string
+// "Legendary Weaponry". Don't collapse them to "Legendary Weaponry" — that
+// was tried and reverted (it doesn't look right / loses the distinction).
+const MOLD_FARMING_ENTRIES = [
+  {
+    name: "Light Boots of Hermit",
+    stages: ["L"],
+    level: "—",
+    reward: "Thom Mundan",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "3.70%",
+    notes: "Abaddon · Legendary Novice IV",
+    link: "https://www.pwdatabase.com/pwi/items/13083",
+  },
+  {
+    name: "Heavy Vambraces of Hermit",
+    stages: ["L"],
+    level: "—",
+    reward: "Gaurnob Cloister Guard",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "3.70%",
+    notes: "Abaddon · Legendary Novice V",
+    link: "https://www.pwdatabase.com/pwi/items/13092",
+  },
+  {
+    name: "Bracers of Abandonment",
+    stages: ["L"],
+    level: "—",
+    reward: "Monoblat Dracoboa",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "4.02%",
+    notes: "Abaddon · Legendary Novice V",
+    link: "https://www.pwdatabase.com/pwi/items/13095",
+  },
+  {
+    name: "Boots of Shadow Fountain",
+    stages: ["L"],
+    level: "—",
+    reward: "Farren Sereneti",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "2.45%",
+    notes: "Gate of Delirium · Legendary Novice IV",
+    link: "https://www.pwdatabase.com/pwi/items/13086",
+  },
+  {
+    name: "Inferno Bracers",
+    stages: ["L"],
+    level: "—",
+    reward: "Calcid of the Flame",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "1.24%",
+    notes: "Gate of Delirium · Legendary Novice V",
+    link: "https://www.pwdatabase.com/pwi/items/13091",
+  },
+  {
+    name: "Plate of Endless Warden",
+    stages: ["L"],
+    level: "—",
+    reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "2.7%",
+    notes: "Seat of Torment · Legendary Novice I",
+    link: "https://www.pwdatabase.com/pwi/items/13047",
+  },
+  {
+    name: "Scribe's Shoes",
+    stages: ["L"],
+    level: "—",
+    reward: "Voidweaver",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "3.7%",
+    notes: "Seat of Torment · Legendary Novice IV",
+    link: "https://www.pwdatabase.com/pwi/items/13080",
+  },
+  {
+    name: "Sleeves of Demon Sword",
+    stages: ["L"],
+    level: "—",
+    reward: "Rancid Venerati",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "4.02%",
+    notes: "Seat of Torment · Legendary Novice V",
+    link: "https://www.pwdatabase.com/pwi/items/13098",
+  },
+  {
+    name: "Pants of Dragon Scales",
+    stages: ["L"],
+    level: "—",
+    reward: "Myriadtail Wyvern",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "2.4%",
+    notes: "Secret Frostcover Undergrounds · Legendary Novice III",
+    link: "https://www.pwdatabase.com/pwi/items/13074",
+  },
+  {
+    name: "Boots of Tiger Strength",
+    stages: ["L"],
+    level: "—",
+    reward: "Fushma - Hexocolot Lieutenant",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "2.5%",
+    notes: "Secret Frostcover Undergrounds · Legendary Novice IV",
+    link: "https://www.pwdatabase.com/pwi/items/13082",
+  },
+  {
+    name: "Brahma's Lash",
+    stages: ["L"],
+    level: "—",
+    reward: "Phlebo",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "1.12%",
+    notes: "Eden · Legendary Sword Master",
+    link: "https://www.pwdatabase.com/pwi/items/12989",
+  },
+  {
+    name: "Dragon's Bite",
+    stages: ["L"],
+    level: "—",
+    reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "1.7%",
+    notes: "Seat of Torment · Legendary Spear Master",
+    link: "https://www.pwdatabase.com/pwi/items/8277",
+  },
+  {
+    name: "Fist of Heroism",
+    stages: ["L"],
+    level: "—",
+    reward: "Peachblossom Ritualist",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "1.9%",
+    notes: "Abaddon · Legendary Fist Master",
+    link: "https://www.pwdatabase.com/pwi/items/8295",
+  },
+  {
+    name: "Midnight Black",
+    stages: ["L"],
+    level: "—",
+    reward: "Peachblossom Ritualist",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "2.2%",
+    notes: "Abaddon · Legendary Wizard",
+    link: "https://www.pwdatabase.com/pwi/items/8315",
+  },
+  {
+    name: "Sinister Shooter",
+    stages: ["L"],
+    level: "—",
+    reward: "Calcid of the Flame",
+    egValue: null, // pure item/mat drop, no EG figure attached
+    freq: "1.2%",
+    notes: "Gate of Delirium · Legendary Archer",
+    link: "https://www.pwdatabase.com/pwi/items/8301",
+  },
+  {
+    name: "Adversity Daggers",
+    stages: ["L"],
+    level: "—",
+    reward: "Vile: The Incarcerate — worth ~20c (cubi gold)",
+    egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
+    freq: "2.86%",
+    notes: "Warsong City",
+    link: "https://www.pwdatabase.com/pwi/items/34860",
+  },
+  {
+    name: "Greaves of Fallen",
+    stages: ["L"],
+    level: "—",
+    reward: "Auto Cultivation reward — worth ~20-25c (cubi gold)",
+    rewardShort: "Auto Cultivation reward (see details)",
+    egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
+    // Trophy Mode Dungeons is a second, higher-rate acquisition path per
+    // in-game info — no confirmed % for that one yet. The figure below is
+    // pwdatabase's retail drop rate (open-world mob drop, ~100 possible
+    // mobs, all listed at this same rate).
+    freq: "0.0007%",
+    locationShort: "Also via Trophy Mode Dungeons or mob drop (see details)",
+    notes: "Also obtainable via Trophy Mode Dungeons (higher %, TBD), or mob drop (very low %, ~100 possible mobs)",
+    link: "https://www.pwdatabase.com/pwi/items/13079",
+  },
+  {
+    name: "Mold: Cuisses of Hamadryad",
+    stages: ["L"],
+    level: "—",
+    reward: "Gold Mold (90+) quest reward — worth ~20-25c (cubi gold)",
+    rewardShort: "Gold Mold (90+) quest reward (see details)",
+    egValue: null, // pure item drop, no EG figure attached
+    // Quest reward is the confirmed acquisition path (Gold Mold 90+,
+    // awarded twice per pwdatabase). Mob drop below is pwdatabase's
+    // retail drop rate (open-world mob drop, ~121 possible mobs, all
+    // listed at this same rate) — a secondary, very low-rate path.
+    freq: "0.0014%",
+    locationShort: "Also via Trophy Mode Dungeons or mob drop (see details)",
+    notes: "Also obtainable via Trophy Mode Dungeons (higher %, TBD), or mob drop (very low %, ~121 possible mobs)",
+    link: "https://www.pwdatabase.com/pwi/items/13064",
+  },
+  {
+    name: "Mold: Pants of Demonic Evil",
+    stages: ["L"],
+    level: "—",
+    reward: "Gold Mold (90+) quest reward — worth ~20-25c (cubi gold)",
+    rewardShort: "Gold Mold (90+) quest reward (see details)",
+    egValue: null, // pure item drop, no EG figure attached
+    // Quest reward is the confirmed acquisition path (Gold Mold 90+,
+    // awarded twice per pwdatabase). Mob drop below is pwdatabase's
+    // retail drop rate (open-world mob drop, ~121 possible mobs, all
+    // listed at this same rate) — a secondary, very low-rate path.
+    freq: "0.0014%",
+    locationShort: "Also via Trophy Mode Dungeons or mob drop (see details)",
+    notes: "Also obtainable via Trophy Mode Dungeons (higher %, TBD), or mob drop (very low %, ~121 possible mobs)",
+    link: "https://www.pwdatabase.com/pwi/items/13076",
+  },
+];
+// ---- end MOLD_FARMING_ENTRIES ----
+
+// ----------------------------------------------------------------------------
+// MISCELLANEOUS
+// ----------------------------------------------------------------------------
+const MISCELLANEOUS_ENTRIES = [
+  {
+    name: "Decomposing NPC Gear",
+    level: "Blacksmith/Tailor skill",
+    reward: "Perfect Stones, Pakua Stones",
+    egValue: null,
+    freq: "N/A",
+    notes: "Blacksmith/Tailor NPCs are available in most major cities (e.g. Momaganon, Lothranis) — use whichever is convenient.",
+    link: "https://www.pwdatabase.com/pwi/items/5639",
+  },
+  {
+    name: "Sovereign's Seal",
+    level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89 — unconfirmed)",
+    reward: "2x Sigil of Nightbloom per day",
+    egValue: null,
+    freq: "Daily (2x)",
+    notes: "Requires 35k reputation, plus Red Jades and Grey Tiger Badges in bag (both bought from merchants). Sigils of Nightbloom exchanged with Vyn Ren in West Archosaur.",
+    link: "https://www.pwdatabase.com/pwi/items/36673",
+  },
+];
+// ---- end MISCELLANEOUS_ENTRIES ----
+
+// ----------------------------------------------------------------------------
+// CATEGORY REGISTRY
+// Each category is a tiny object pointing at the array defined above — this
+// object literal is intentionally small so it's easy to review at a glance.
+// ----------------------------------------------------------------------------
+const CATEGORIES = [
+  {
+    key: "event-gold",
+    name: "Event Gold",
+    entries: EVENT_GOLD_ENTRIES,
+  },
+  {
+    key: "dungeons-instances",
+    name: "Dungeons / Instances",
+    entries: DUNGEONS_INSTANCES_ENTRIES,
+  },
+  {
+    key: "mold-farming",
+    name: "Mold Farming",
+    entries: MOLD_FARMING_ENTRIES,
+  },
+  {
+    key: "miscellaneous",
+    name: "Miscellaneous",
+    entries: MISCELLANEOUS_ENTRIES,
+  },
+];
+
+// ---- REFERENCES ----
+// One entry per website used as a source. Add a new domain here only when a
+// genuinely new site gets used (not per item/page).
+const REFERENCES = [
+  { title: "Evolved PWI", url: "https://evolvedpw.com" },
+  { title: "PWDatabase", url: "https://www.pwdatabase.com" },
+];
+
+// ---- EXCHANGE RATES ----
+// Coin / Cubi Gold / Event Gold conversion rates move with the server's
+// market, so they live here in ONE place instead of being guessed at inside
+// individual entries. Update `pair`/`value` and `lastUpdated` whenever you
+// have a fresh check on the market — leave a rate as "—" (not a guessed
+// number) if you don't have a current figure for it yet.
+const EXCHANGE_RATES = {
+  lastUpdated: "Aug 20, 2026",
+  rates: [
+    { pair: "1 Cubi Gold", value: "~300 million Coin" },
+    // Calculated from the two rates above (300M / 15–20 EG per Cubi), not
+    // independently checked — update directly if you get a real market read.
+    { pair: "1 Event Gold", value: "~15–20 million Coin" },
+    { pair: "1 Cubi Gold", value: "15–20 Event Gold" },
+  ],
+};
+
+// ---- ITEM VALUES ----
+// Coin conversion (Value badge/sort) was removed — market rates drift too
+// fast to keep accurate, and the stated rewards are enough on their own to
+// judge a method. EXCHANGE_RATES above is kept as a manual reference only
+// (the Rates page), not read by any per-entry calculation anymore.
+
+// ============================================================================
+// VALIDATION — catches common data-entry mistakes early, on every page load.
+// Logs to the browser console (F12 → Console) rather than blocking the page,
+// since these are usually non-fatal (e.g. a missing egValue).
+// ============================================================================
+function validateCategories() {
+  const problems = [];
+  const requiredFields = ["name", "level", "reward", "freq"];
+
+  CATEGORIES.forEach(cat => {
+    if (!cat.key) problems.push(`Category "${cat.name || "?"}" is missing a key.`);
+    if (!Array.isArray(cat.entries)) {
+      problems.push(`Category "${cat.key || cat.name}" has no entries array.`);
+      return;
+    }
+
+    const namesInCategory = new Set();
+    cat.entries.forEach(entry => {
+      requiredFields.forEach(field => {
+        if (entry[field] === undefined || entry[field] === null || entry[field] === "") {
+          problems.push(`"${entry.name || "(unnamed entry)"}" in "${cat.key}" is missing "${field}".`);
+        }
+      });
+      // egValue must be present (a number, or explicitly null for
+      // item-only rewards) — `undefined` means someone added an entry and
+      // forgot to set it, which would silently break the Reward sort.
+      if (!("egValue" in entry)) {
+        problems.push(`"${entry.name}" in "${cat.key}" is missing "egValue" (set it to a number, or null if the reward has no EG figure).`);
+      } else if (entry.egValue !== null && typeof entry.egValue !== "number") {
+        problems.push(`"${entry.name}" in "${cat.key}" has a non-numeric egValue: ${JSON.stringify(entry.egValue)}.`);
+      }
+      if (namesInCategory.has(entry.name)) {
+        problems.push(`"${entry.name}" appears more than once inside "${cat.key}" (duplicate row).`);
+      }
+      namesInCategory.add(entry.name);
+    });
+  });
+
+  if (problems.length > 0) {
+    console.warn(`[Coin Ledger] ${problems.length} data issue(s) found:`);
+    problems.forEach(p => console.warn("  - " + p));
+  }
+}
+
+// ============================================================================
+// STATE
+// ============================================================================
+let activeCategory = "all";
+let activeSort = "default";
+let searchTerm = "";
+
+function locationKey(entry) {
+  // Notes are often formatted as "<Location> · <extra detail>"
+  if (entry.notes && entry.notes.includes(" · ")) {
+    return entry.notes.split(" · ")[0];
+  }
+  return entry.notes || entry.name;
+}
+
+// Splits a "<Location> · <Title>" notes string into its two parts. Used only
+// for the Mold Farming modal display (see openModal), since that's the one
+// category where notes are always written in this location+title shape.
+function splitLocationTitle(notes) {
+  if (!notes) return { location: "", title: "" };
+  const sepIndex = notes.indexOf(" · ");
+  if (sepIndex === -1) return { location: notes, title: "" };
+  return {
+    location: notes.slice(0, sepIndex),
+    title: notes.slice(sepIndex + 3),
+  };
+}
+
+function sortEntries(list) {
+  if (activeSort === "name") {
+    return [...list].sort((a, b) => a.name.localeCompare(b.name));
+  }
+  if (activeSort === "location") {
+    return [...list].sort((a, b) => locationKey(a).localeCompare(locationKey(b)) || a.name.localeCompare(b.name));
+  }
+  if (activeSort === "reward") {
+    // Reads entry.egValue directly — a number set explicitly on the data
+    // (see the DATA section's field guide at the top of this script) rather
+    // than parsed out of the human-readable `reward` string. That keeps
+    // this sort exact and avoids the earlier bug where a long item-list
+    // reward (no EG figure at all, e.g. Flowsilver Palace) got misread.
+    return [...list].sort((a, b) => {
+      const numA = a.egValue;
+      const numB = b.egValue;
+      // Entries with egValue: null (pure item-drop rewards, or any category
+      // without EG-denominated rewards) are unranked, not "highest" — they
+      // go to the TOP of this low-to-high list rather than the bottom.
+      // Putting them at the bottom would visually read as "best reward" in
+      // an ascending sort, which falsely inflates entries just because they
+      // list a lot of items rather than because they're actually more
+      // profitable.
+      if (numA == null && numB == null) return a.name.localeCompare(b.name);
+      if (numA == null) return -1;
+      if (numB == null) return 1;
+      return numA - numB || a.name.localeCompare(b.name);
+    });
+  }
+  return list;
+}
+
+function renderCategoryFilters() {
+  const container = document.getElementById("categoryFilters");
+  const allChip = `<button class="chip active" data-cat="all">All Categories</button>`;
+  const chips = CATEGORIES.map(c =>
+    `<button class="chip" data-cat="${c.key}">${c.name}</button>`
+  ).join("");
+  container.innerHTML = allChip + chips;
+  container.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      container.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeCategory = chip.dataset.cat;
+      render();
+    });
+  });
+}
+
+function matchesFilters(entry) {
+  const searchOk = !searchTerm ||
+    entry.name.toLowerCase().includes(searchTerm) ||
+    (entry.abbr || "").toLowerCase().includes(searchTerm) ||
+    (entry.notes || "").toLowerCase().includes(searchTerm);
+  return searchOk;
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/"/g, "&quot;");
+}
+
+// Parses per-task reward strings like "15x Event Gold" into {qty, name},
+// then sums quantities for any name that repeats across tasks (e.g. Event
+// Gold or Primordial Blood showing up in every task). Rewards with no
+// leading number (e.g. "Glyph Lv.8 – choose color") keep qty as null and
+// are shown without a count. Preserves first-seen order.
+function aggregateTaskRewards(tasks) {
+  const totals = new Map();
+  const order = [];
+  tasks.forEach(t => {
+    (t.rewards || []).forEach(r => {
+      const match = r.match(/^(\d+)x\s+(.+)$/);
+      const qty = match ? parseInt(match[1], 10) : null;
+      const name = match ? match[2] : r;
+      if (!totals.has(name)) {
+        totals.set(name, qty);
+        order.push(name);
+      } else if (qty !== null && totals.get(name) !== null) {
+        totals.set(name, totals.get(name) + qty);
+      }
+    });
+  });
+  return order.map(name => ({ name, qty: totals.get(name) }));
+}
+
+// For entries with a task chain, the reward column shows small chips
+// summarizing the full reward pool instead of one long sentence — there's
+// too much in a chain like Uncharted Paradise's 4 tasks to read comfortably
+// as plain text. A "(total)" caption makes clear these are summed across
+// every task in the chain, not a single task's reward. Currency (Event
+// Gold / Cubi Gold) always shows in full; the remaining item types are
+// capped so the row doesn't sprawl, with a "+N more" chip (hover for the
+// rest) covering the overflow. Full detail is always one click away in
+// the modal regardless.
+
+function renderRewardCell(entry, categoryKey) {
+  const cellClass = categoryKey === "mold-farming" ? "col-boss" : "col-reward";
+  if (!entry.tasks) {
+    return `<div class="${cellClass}">${entry.rewardShort || entry.reward}</div>`;
+  }
+  const isCurrency = name => /event gold|cubi gold/i.test(name);
+  const aggregated = aggregateTaskRewards(entry.tasks);
+  const currency = aggregated.filter(r => isCurrency(r.name));
+  const items = aggregated
+    .filter(r => !isCurrency(r.name))
+    .sort((a, b) => (b.qty || 0) - (a.qty || 0));
+
+  const MAX_ITEM_CHIPS = 3;
+  const shown = items.slice(0, MAX_ITEM_CHIPS);
+  const hidden = items.slice(MAX_ITEM_CHIPS);
+
+  const chip = (r, extraClass) =>
+    `<span class="reward-chip${extraClass ? " " + extraClass : ""}">${r.qty !== null ? r.qty + "x " : ""}${r.name}</span>`;
+
+  let chipsHtml =
+    currency.map(r => chip(r, "reward-chip-gold")).join("") +
+    shown.map(r => chip(r)).join("");
+
+  if (hidden.length > 0) {
+    const hiddenLabel = hidden
+      .map(r => (r.qty !== null ? `${r.qty}x ${r.name}` : r.name))
+      .join(", ");
+    chipsHtml += `<span class="reward-chip reward-chip-more" title="${escapeAttr(hiddenLabel)}">+${hidden.length} more</span>`;
+  }
+
+  return `<div class="${cellClass}"><div class="reward-total-label">(total)</div><div class="reward-chips">${chipsHtml}</div></div>`;
+}
+
+// categoryKey is threaded through to each row so the modal can show the
+// correct category even for an entry (like Icebound Underworld) that's
+// shared across more than one category. It also drives the Mold Farming
+// Location/Title display below (see splitLocationTitle).
+function renderRow(entry, categoryKey) {
+  const isMoldFarming = categoryKey === "mold-farming";
+  const { location, title } = isMoldFarming ? splitLocationTitle(entry.notes) : { location: "", title: "" };
+  const secondCol = isMoldFarming
+    ? `<div class="col-location">${entry.locationShort || location || "—"}</div>`
+    : `<div class="col-level">${entry.level}</div>`;
+  const lastCol = isMoldFarming
+    ? `<div class="col-title">${title}</div>`
+    : `<div class="col-notes">${entry.notesShort || entry.notes}</div>`;
+  const nameHtml = (categoryKey === "dungeons-instances" && entry.abbr)
+    ? `${entry.name} <span class="name-abbr">(${entry.abbr})</span>`
+    : entry.name;
+  const freqCol = isMoldFarming
+    ? `<div class="col-drop">${entry.freq}</div>`
+    : `<div class="col-freq">${entry.freq}</div>`;
+  return `
+    <div class="row clickable" data-entry-key="${escapeAttr(entry.name)}" data-cat-key="${escapeAttr(categoryKey)}">
+      <div class="col-name">${nameHtml}</div>
+      ${secondCol}
+      ${renderRewardCell(entry, categoryKey)}
+      ${freqCol}
+      ${lastCol}
+    </div>`;
+}
+
+
+function renderHeadRow(categoryKey) {
+  const isMoldFarming = categoryKey === "mold-farming";
+  return `
+    <div class="row head">
+      <div>Method</div>
+      <div>${isMoldFarming ? "Location" : "Level"}</div>
+      <div>${isMoldFarming ? "Boss/Mob" : "Reward"}</div>
+      <div>${isMoldFarming ? "Drop Chance" : "Frequency"}</div>
+      <div>${isMoldFarming ? "Title" : "Notes"}</div>
+    </div>`;
+}
+
+function render() {
+  const content = document.getElementById("content");
+  const cats = activeCategory === "all" ? CATEGORIES : CATEGORIES.filter(c => c.key === activeCategory);
+  let html = "";
+  let totalShown = 0;
+
+  cats.forEach(cat => {
+    const filtered = cat.entries.filter(matchesFilters);
+    if (cat.entries.length > 0 && filtered.length === 0) return;
+
+    html += `<div class="category-block">
+      <div class="category-head">
+        <h2>${cat.name}</h2>
+        <span class="category-count">${filtered.length} method${filtered.length === 1 ? "" : "s"}</span>
+      </div>`;
+
+    if (cat.entries.length === 0) {
+      html += `<div class="empty-state">No entries yet in ${cat.name}.</div>`;
+    } else {
+      html += `<div class="entry-table">${renderHeadRow(cat.key)}${sortEntries(filtered).map(e => renderRow(e, cat.key)).join("")}</div>`;
+    }
+
+    html += `</div>`;
+    totalShown += filtered.length;
+  });
+
+  if (totalShown === 0 && CATEGORIES.some(c => c.entries.length > 0)) {
+    html = `<div class="no-results">No methods match your filters.</div>`;
+  }
+
+  content.innerHTML = html;
+}
+
+document.getElementById("sortFilters").querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    document.querySelectorAll("#sortFilters .chip").forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    activeSort = chip.dataset.sort;
+    render();
+  });
+});
+
+document.getElementById("search").addEventListener("input", (e) => {
+  searchTerm = e.target.value.toLowerCase();
+  render();
+});
+
+// ============================================================================
+// INFO MODAL
+// ============================================================================
+
+// categoryKeyHint: the category the clicked row belongs to. Checked first so
+// an entry shared across categories (e.g. Icebound Underworld) always shows
+// the category it was actually clicked from, not just whichever category
+// happens to come first in CATEGORIES.
+function findEntry(name, categoryKeyHint) {
+  if (categoryKeyHint) {
+    const hinted = CATEGORIES.find(c => c.key === categoryKeyHint);
+    if (hinted) {
+      const found = hinted.entries.find(e => e.name === name);
+      if (found) return { entry: found, categoryName: hinted.name, categoryKey: hinted.key };
+    }
+  }
+  for (const cat of CATEGORIES) {
+    const found = cat.entries.find(e => e.name === name);
+    if (found) return { entry: found, categoryName: cat.name, categoryKey: cat.key };
+  }
+  return null;
+}
+
+function openModal(name, categoryKeyHint) {
+  const result = findEntry(name, categoryKeyHint);
+  if (!result) return;
+  const { entry, categoryName, categoryKey } = result;
+
+  // Mold Farming entries store "<Location> · <Title>" in notes — for this
+  // category only, show them as their own Location / Title fields instead
+  // of the generic Level / Notes fields other categories use.
+  const isMoldFarming = categoryKey === "mold-farming";
+  const { location, title } = isMoldFarming ? splitLocationTitle(entry.notes) : { location: "", title: "" };
+
+  const panel = document.getElementById("modalPanel");
+  const modalNameHtml = (categoryKey === "dungeons-instances" && entry.abbr)
+    ? `${entry.name} <span class="modal-title-abbr">(${entry.abbr})</span>`
+    : entry.name;
+  panel.innerHTML = `
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+    <div class="modal-title">${modalNameHtml}</div>
+    <div class="modal-meta">${categoryName}</div>
+    <div class="modal-field">
+      <div class="modal-field-label">${isMoldFarming ? "Location" : "Level"}</div>
+      <div class="modal-field-value">${isMoldFarming ? (location || "—") : entry.level}</div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">${isMoldFarming ? "Boss/Mob" : "Reward"}</div>
+      <div class="modal-field-value">${entry.reward}</div>
+    </div>
+    <div class="modal-field">
+      <div class="modal-field-label">${isMoldFarming ? "Drop Chance" : "Frequency"}</div>
+      <div class="modal-field-value">${entry.freq}</div>
+    </div>
+    ${isMoldFarming
+      ? (title ? `
+    <div class="modal-field">
+      <div class="modal-field-label">Title</div>
+      <div class="modal-field-value">${title}</div>
+    </div>` : "")
+      : (entry.notes ? `
+    <div class="modal-field">
+      <div class="modal-field-label">Notes</div>
+      <div class="modal-field-value">${entry.notes}</div>
+    </div>` : "")
+    }
+    ${(entry.tasks || entry.breakdown) ? `
+    <div class="modal-field">
+      <div class="modal-field-label">Task Breakdown</div>
+      <div class="task-list">
+        ${(entry.tasks || entry.breakdown).map(t => `
+          <div class="task-row">
+            <div class="task-num">${t.title ? t.title : `Task ${t.task}`}${t.kills ? `<span class="task-kills">${t.kills} kills</span>` : ""}</div>
+            <div class="task-rewards">${t.rewards.join(" · ")}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>` : ""}
+    ${entry.link ? `
+    <a class="modal-link" href="${entry.link}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link)}</a>
+    ` : ""}
+  `;
+  document.getElementById("modalBackdrop").classList.add("open");
+  document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+}
+
+function linkDomain(url) {
+  try { return new URL(url).hostname.replace("www.", ""); } catch (e) { return "source"; }
+}
+
+function closeModal() {
+  document.getElementById("modalBackdrop").classList.remove("open");
+}
+
+document.getElementById("modalBackdrop").addEventListener("click", (e) => {
+  if (e.target.id === "modalBackdrop") closeModal();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeModal();
+});
+
+document.getElementById("content").addEventListener("click", (e) => {
+  const row = e.target.closest(".row.clickable");
+  if (row && row.dataset.entryKey) openModal(row.dataset.entryKey, row.dataset.catKey);
+});
+
+// ============================================================================
+// REFERENCES PANEL
+// ============================================================================
+function renderReferences() {
+  const panel = document.getElementById("refPanel");
+  const credit = `<div class="ref-credit"><div class="credit-main">Built by fiero</div><div class="credit-sub">with Claude</div></div>`;
+  if (REFERENCES.length === 0) {
+    panel.innerHTML = `<div class="ref-panel-title">References</div><div style="font-size:12px;color:var(--text-faint);">None yet</div>${credit}`;
+    return;
+  }
+  const items = REFERENCES.map(r => {
+    let domain = "";
+    try { domain = new URL(r.url).hostname.replace("www.", ""); } catch (e) {}
+    return `<div class="ref-item">
+      <a href="${r.url}" target="_blank" rel="noopener">${r.title}<span class="ref-domain">${domain}</span></a>
+    </div>`;
+  }).join("");
+  panel.innerHTML = `<div class="ref-panel-title">References (${REFERENCES.length})</div>${items}${credit}`;
+}
+
+document.getElementById("refBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.getElementById("refPanel").classList.toggle("open");
+});
+
+document.addEventListener("click", (e) => {
+  const panel = document.getElementById("refPanel");
+  if (panel.classList.contains("open") && !panel.contains(e.target) && e.target.id !== "refBtn") {
+    panel.classList.remove("open");
+  }
+});
+
+// ============================================================================
+// EXCHANGE RATES PAGE — a dedicated full page (like the landing gate), not a
+// dropdown. Rates button swaps out the app shell for this page; the back
+// button swaps it back.
+// ============================================================================
+function renderRates() {
+  const rows = EXCHANGE_RATES.rates.map(r => `
+    <div class="rate-item">
+      <span class="rate-pair">${r.pair}</span>
+      <span class="rate-value">${r.value}</span>
+    </div>`).join("");
+  document.getElementById("ratesPageList").innerHTML = rows;
+  document.getElementById("ratesPageUpdated").textContent = `Last updated: ${EXCHANGE_RATES.lastUpdated}`;
+}
+
+function showRatesPage() {
+  document.getElementById("appShell").classList.add("hidden");
+  document.getElementById("ratesPage").classList.remove("hidden");
+}
+
+function hideRatesPage() {
+  document.getElementById("ratesPage").classList.add("hidden");
+  document.getElementById("appShell").classList.remove("hidden");
+}
+
+document.getElementById("ratesBtn").addEventListener("click", showRatesPage);
+document.getElementById("ratesBackBtn").addEventListener("click", hideRatesPage);
+
+// ============================================================================
+// LANDING PAGE
+// ============================================================================
+function renderLandingStats() {
+  const el = document.getElementById("landingStats");
+  if (!el) return;
+  const totalEntries = CATEGORIES.reduce((sum, c) => sum + c.entries.length, 0);
+  el.textContent = `${totalEntries} methods · ${CATEGORIES.length} categories · ${REFERENCES.length} sources`;
+}
+
+function enterLedger() {
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("appShell").classList.remove("hidden");
+}
+
+document.getElementById("enterBtn").addEventListener("click", enterLedger);
+
+function backToLanding() {
+  document.getElementById("appShell").classList.add("hidden");
+  document.getElementById("landing").classList.remove("hidden");
+}
+
+const brandHomeEl = document.getElementById("brandHome");
+brandHomeEl.addEventListener("click", backToLanding);
+brandHomeEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    backToLanding();
+  }
+});
+
+// ============================================================================
+// ERROR HANDLING (part 1 of 2)
+// Catches runtime errors that happen AFTER this script successfully starts
+// running — e.g. clicking a filter triggers a bug. A JS SYNTAX error (like
+// the missing-bracket bug that broke this file before) prevents this whole
+// <script> block from running at all, so it can't be caught from in here —
+// see the small watchdog <script> tag right after this one closes, which
+// catches that case instead.
+// ============================================================================
+function showFatalError(err) {
+  window.__ledgerErrorShown = true; // tells the watchdog script not to duplicate this
+  // Force the app content visible — an error hidden behind the landing
+  // screen would look exactly like the site just not loading at all.
+  const landing = document.getElementById("landing");
+  const appShell = document.getElementById("appShell");
+  if (landing) landing.classList.add("hidden");
+  if (appShell) appShell.classList.remove("hidden");
+  const content = document.getElementById("content");
+  if (content) {
+    content.innerHTML = `
+      <div style="max-width:640px;margin:40px auto;padding:20px;border:1px solid var(--bronze);border-radius:8px;background:var(--bg-alt);">
+        <div style="font-family:'Fraunces',serif;font-size:17px;color:var(--gold-bright);margin-bottom:8px;">⚠ The page hit an error and couldn't finish loading</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:10px;">This usually means a recent edit to the data broke the file's structure (a missing bracket or comma is the most common cause).</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-faint);white-space:pre-wrap;word-break:break-word;">${(err && err.message) ? err.message : String(err)}</div>
+      </div>`;
+  }
+}
+
+window.addEventListener("error", (e) => {
+  showFatalError(e.error || e.message);
+});
+
+// ============================================================================
+// INIT
+// ============================================================================
+try {
+  validateCategories();
+  renderReferences();
+  renderRates();
+  renderCategoryFilters();
+  renderLandingStats();
+  render();
+  window.__ledgerInitialized = true; // seen by the watchdog script below
+} catch (err) {
+  showFatalError(err);
+  throw err; // still surface it in the console for debugging
+}
+
+</script>
+
+<!--
+  WATCHDOG — deliberately a separate, tiny, self-contained <script> tag.
+
+  Why separate: if the big script above has a JS syntax error (e.g. a
+  missing bracket from a hand-edit), the browser skips that ENTIRE script
+  block silently — nothing in it runs, including any try/catch inside it.
+  A second, independent <script> tag is not affected by a syntax error in
+  the first one, so it still runs and can report the failure.
+
+  Keep this block small and simple — the less it does, the less likely it
+  is to ever need editing (and thus the less likely it is to break itself).
+-->
+<script>
+  if (!window.__ledgerInitialized && !window.__ledgerErrorShown) {
+    // Force the app content visible — same reasoning as showFatalError()
+    // above: if a syntax error stopped the main script before it could even
+    // build the page, the landing screen is still covering everything.
+    var landingEl = document.getElementById("landing");
+    var appShellEl = document.getElementById("appShell");
+    if (landingEl) landingEl.className += " hidden";
+    if (appShellEl) appShellEl.className = appShellEl.className.replace(/\bhidden\b/, "").trim();
+    var el = document.getElementById("content");
+    if (el) {
+      el.innerHTML =
+        '<div style="max-width:640px;margin:40px auto;padding:20px;border:1px solid #B5722E;' +
+        'border-radius:8px;background:#1A1D29;color:#ECE8DD;font-family:sans-serif;">' +
+        '<div style="font-size:17px;margin-bottom:8px;">⚠ The page failed to load</div>' +
+        '<div style="font-size:13px;color:#9498A8;line-height:1.5;">' +
+        'This means the main script has a JavaScript error that stopped it from running at all ' +
+        '\u2014 most often a missing bracket, brace, or comma from a recent edit to the data. ' +
+        'Open the browser console (F12, then the Console tab) to see the exact error and line number.' +
+        '</div></div>';
+    }
+  }
+</script>
+
+
+</body>
+</html>
