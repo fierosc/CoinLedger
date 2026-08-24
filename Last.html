@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Coin Ledger — Evolved PWI Moneymaking Wiki</title>
-<meta name="description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game — dungeons, mold farming, Event Gold, and more, with sourced drop rates and rewards.">
+<title>The Coin Ledger: Evolved PWI Moneymaking Wiki</title>
+<meta name="description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game: dungeons, mold farming, Event Gold, and more, with sourced drop rates and rewards.">
 <meta name="robots" content="index, follow">
 <!-- Replace with your actual published domain before going live. -->
 <link rel="canonical" href="https://REPLACE-WITH-YOUR-DOMAIN.com/">
 <meta name="theme-color" content="#14161F">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="The Coin Ledger — Evolved PWI Moneymaking Wiki">
+<meta property="og:title" content="The Coin Ledger: Evolved PWI Moneymaking Wiki">
 <meta property="og:description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game.">
 <meta property="og:url" content="https://REPLACE-WITH-YOUR-DOMAIN.com/">
 <meta property="og:site_name" content="The Coin Ledger">
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The Coin Ledger — Evolved PWI Moneymaking Wiki">
+<meta name="twitter:title" content="The Coin Ledger: Evolved PWI Moneymaking Wiki">
 <meta name="twitter:description" content="A categorized wiki of every way to make Coin in Evolved PWI, from early game to late game.">
 
 <script type="application/ld+json">
@@ -83,7 +83,7 @@
     z-index: 20;
   }
 
-  .ref-btn, .rates-btn {
+  .ref-btn, .rates-btn, .notes-btn {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     padding: 6px 12px;
@@ -93,7 +93,7 @@
     color: var(--text-dim);
     cursor: pointer;
   }
-  .ref-btn:hover, .rates-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .ref-btn:hover, .rates-btn:hover, .notes-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
 
   .ref-panel {
     display: none;
@@ -529,6 +529,7 @@
     .topbar-actions {
       position: static;
       justify-content: flex-start;
+      flex-wrap: wrap;
       margin-bottom: 12px;
     }
     .ref-panel { top: 80px; }
@@ -667,6 +668,144 @@
   }
   .rates-page-back:hover { background: var(--gold); color: #14161F; }
   .rates-page-back:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ---- NOTES PAGE ---- */
+  .notes-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(200,155,74,0.09), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 10%, rgba(78,155,134,0.07), transparent);
+  }
+  .notes-page.hidden { display: none; }
+  .notes-page-inner { text-align: center; max-width: 640px; width: 100%; }
+  .notes-page-mark { font-size: 34px; color: var(--gold); margin-bottom: 14px; }
+  .notes-page-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 34px;
+    color: var(--gold-bright);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+  }
+  .notes-page-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 28px;
+  }
+  .notes-page-list {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .note-item {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .note-item-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+  }
+  .note-item-body {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .notes-page-back {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 10px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .notes-page-back:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .notes-page-back:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ---- CONTACT FORM (bottom of Notes page) ---- */
+  .contact-form { display: flex; flex-direction: column; gap: 10px; }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    background: var(--bg-alt);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+  }
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder { color: var(--text-faint); }
+  .contact-form input:focus,
+  .contact-form textarea:focus { outline: none; border-color: var(--gold); }
+  .contact-form textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+  .contact-form-honeypot { display: none; }
+  .contact-form-submit {
+    align-self: flex-start;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .contact-form-submit:hover { background: var(--gold); color: #14161F; }
+  .contact-form-submit:disabled { opacity: 0.5; cursor: default; }
+  .contact-form-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    min-height: 16px;
+  }
+  .contact-form-status.success { color: var(--jade); }
+  .contact-form-status.error { color: var(--bronze); }
+
+  .contact-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+    color: var(--text-faint);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .contact-divider::before,
+  .contact-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule-soft);
+  }
+  .discord-contact {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .discord-contact strong { color: var(--gold-bright); font-weight: 500; }
 </style>
 </head>
 <body>
@@ -676,7 +815,7 @@
     <div class="landing-mark">◈</div>
     <h1 class="landing-title">The Coin Ledger</h1>
     <div class="landing-sub">EVOLVED PWI</div>
-    <div class="landing-tagline">Every way to make Coin in Evolved PWI, cataloged — early game to late.</div>
+    <div class="landing-tagline">Every way to make Coin in Evolved PWI, cataloged, early game to late.</div>
     <div class="landing-stats" id="landingStats"></div>
     <button class="landing-enter" id="enterBtn">Enter the Ledger →</button>
   </div>
@@ -693,6 +832,7 @@
     <div class="topbar-actions">
       <button class="rates-btn" id="ratesBtn">💱 Rates</button>
       <button class="ref-btn" id="refBtn">📚 References</button>
+      <button class="notes-btn" id="notesBtn">📝 Notes</button>
     </div>
     <input class="search" id="search" type="text" placeholder="Search methods…" />
     <div class="filter-row" id="sortFilters" style="margin-top: 8px;">
@@ -729,6 +869,34 @@
     <div class="rates-page-updated" id="ratesPageUpdated"></div>
     <div class="rates-page-note">Drop % figures on this site are pulled from pwdatabase, which lists retail (official server) drop rates. PWI's actual drop process happens in three separate stages. First, a gate based on the level gap between you and the monster decides whether anything drops at all from that kill. Second, if that passes, the server rolls how many items drop, usually 0 to 3, though bosses can repeat this roll several times and drop far more. Third, the server rolls which specific item fills each of those drop slots, chosen from everything on that monster's loot table. That third roll is the percentage pwdatabase and this site actually show. This server runs a 2x drop rate, but that multiplier only touches part of this chain rather than the final number directly. It can't be applied by simply doubling the listed percentage. Actual in-game odds run better than what's shown here, though not a clean 2x.</div>
     <button class="rates-page-back" id="ratesBackBtn">← Back to the Ledger</button>
+  </div>
+</div>
+
+<div class="notes-page hidden" id="notesPage">
+  <div class="notes-page-inner">
+    <div class="notes-page-mark">📝</div>
+    <h2 class="notes-page-title">Notes</h2>
+    <div class="notes-page-sub">EVOLVED PWI</div>
+    <div class="notes-page-list" id="notesPageList"></div>
+
+    <div class="note-item">
+      <div class="note-item-title">Report an issue or suggest an addition</div>
+      <div class="note-item-body" style="margin-bottom: 12px;">Spotted a wrong drop rate, a missing method, or anything else off? Send it straight here.</div>
+      <form class="contact-form" id="contactForm">
+        <input type="text" name="name" placeholder="Name (optional)">
+        <input type="email" name="email" placeholder="Email (optional, only if you want a reply)">
+        <input type="text" name="entry" placeholder="Which entry, if this is about one (optional)">
+        <textarea name="message" placeholder="What's wrong, or what should be added?" required></textarea>
+        <!-- honeypot field — real visitors never fill this in; bots often do -->
+        <input class="contact-form-honeypot" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+        <button type="submit" class="contact-form-submit" id="contactFormSubmit">Send</button>
+        <div class="contact-form-status" id="contactFormStatus"></div>
+      </form>
+      <div class="contact-divider">or</div>
+      <div class="discord-contact">Message me on Discord: <strong>87fierogt</strong></div>
+    </div>
+
+    <button class="notes-page-back" id="notesBackBtn">← Back to the Ledger</button>
   </div>
 </div>
 
@@ -808,7 +976,7 @@ const ICEBOUND_UNDERWORLD_ENTRY = {
   // the linked source and correct if the task breakdown itself is wrong.
   reward: "6-task chain: 65 EG total (tasks 1–4) + Evolved Engrave Stones, Immortal Gift Packs, Weapon Fashion Pack, Glyph Lv.8",
   egValue: 65,
-  freq: "Quest chain — boss per task is randomized, each task harder than the last",
+  freq: "Quest chain: boss per task is randomized, each task harder than the last",
   notes: "Access via Icebound Gatekeeper Sho, Archosaur City (West district). Quest cannot be trashed. Rewards based on Theater of Blood items.",
   link: "https://evolvedpw.com/database/article/icebound-underworld-quest",
   tasks: ICEBOUND_UNDERWORLD_TASKS,
@@ -928,7 +1096,7 @@ const EVENT_GOLD_ENTRIES = [
     egValue: null, // no flat number — depends on character level
     freq: "Up to 3x/day",
     notesShort: "Requires prerequisite chain (see details)",
-    notes: "Requires a prerequisite quest chain first — Love of Dragon Quest, obtainable at any level (server custom change), starting at Mr. Yeh (525, 619). Each bracket below is daily and pays Coin; EG reward on Dragon Quests itself scales with the level of the quest received.",
+    notes: "Requires a prerequisite quest chain first: Love of Dragon Quest, obtainable at any level (server custom change), starting at Mr. Yeh (525, 619). Each bracket below is daily and pays Coin; EG reward on Dragon Quests itself scales with the level of the quest received.",
     link: "https://www.pwdatabase.com/pwi/quest/4848",
     breakdown: [
       { task: 1, title: "Chiu Niu (Lv.20–30)", rewards: ["25 Silver"] },
@@ -992,7 +1160,7 @@ const EVENT_GOLD_ENTRIES = [
 // ----------------------------------------------------------------------------
 const DUNGEONS_INSTANCES_ENTRIES = [
   {
-    name: "Flowsilver Palace — Judgment Mode",
+    name: "Flowsilver Palace: Judgment Mode",
     abbr: "JFSP",
     stages: ["L"],
     level: "100+, Reawakened 1x, Arcane Sky I",
@@ -1186,7 +1354,7 @@ const MOLD_FARMING_ENTRIES = [
     name: "Adversity Daggers",
     stages: ["L"],
     level: "—",
-    reward: "Vile: The Incarcerate — worth ~20c (cubi gold)",
+    reward: "Vile: The Incarcerate, worth ~20c (cubi gold)",
     egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
     freq: "2.86%",
     notes: "Warsong City",
@@ -1196,7 +1364,7 @@ const MOLD_FARMING_ENTRIES = [
     name: "Greaves of Fallen",
     stages: ["L"],
     level: "—",
-    reward: "Auto Cultivation reward — worth ~20-25c (cubi gold)",
+    reward: "Auto Cultivation reward, worth ~20-25c (cubi gold)",
     rewardShort: "Auto Cultivation reward (see details)",
     egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
     // Trophy Mode Dungeons is a second, higher-rate acquisition path per
@@ -1212,7 +1380,7 @@ const MOLD_FARMING_ENTRIES = [
     name: "Mold: Cuisses of Hamadryad",
     stages: ["L"],
     level: "—",
-    reward: "Gold Mold (90+) quest reward — worth ~20-25c (cubi gold)",
+    reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
     egValue: null, // pure item drop, no EG figure attached
     // Quest reward is the confirmed acquisition path (Gold Mold 90+,
@@ -1228,7 +1396,7 @@ const MOLD_FARMING_ENTRIES = [
     name: "Mold: Pants of Demonic Evil",
     stages: ["L"],
     level: "—",
-    reward: "Gold Mold (90+) quest reward — worth ~20-25c (cubi gold)",
+    reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
     egValue: null, // pure item drop, no EG figure attached
     // Quest reward is the confirmed acquisition path (Gold Mold 90+,
@@ -1253,12 +1421,12 @@ const MISCELLANEOUS_ENTRIES = [
     reward: "Perfect Stones, Pakua Stones",
     egValue: null,
     freq: "N/A",
-    notes: "Blacksmith/Tailor NPCs are available in most major cities (e.g. Momaganon, Lothranis) — use whichever is convenient.",
+    notes: "Blacksmith/Tailor NPCs are available in most major cities (e.g. Momaganon, Lothranis); use whichever is convenient.",
     link: "https://www.pwdatabase.com/pwi/items/5639",
   },
   {
     name: "Sovereign's Seal",
-    level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89 — unconfirmed)",
+    level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89, unconfirmed)",
     reward: "2x Sigil of Nightbloom per day",
     egValue: null,
     freq: "Daily (2x)",
@@ -1302,6 +1470,30 @@ const CATEGORIES = [
 const REFERENCES = [
   { title: "Evolved PWI", url: "https://evolvedpw.com" },
   { title: "PWDatabase", url: "https://www.pwdatabase.com" },
+];
+
+// ---- CONTACT FORM ----
+// Powered by Formspree (a free form-backend service — GitHub Pages can't
+// run server code itself, so this is what actually emails submissions).
+// To activate: sign up free at https://formspree.io, create a form, and
+// replace the ID below with the one Formspree gives you (the part after
+// "f/" in your form's endpoint URL).
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqpzojel";
+
+// ---- NOTES ----
+// Freeform notes page — site-building notes, general Evolved PWI info,
+// anything that doesn't fit the categorized entries above. To add a
+// note, add a new { title, body } object below; order in this array is
+// the order shown on the page.
+const NOTES = [
+  {
+    title: "How this site is built",
+    body: "The Coin Ledger is a single hand-edited HTML file: no framework, no database. Every entry lives in a plain JS array inside this page, and a small script renders it into rows and cards on load. Publishing runs through GitHub Pages: a GitHub Action opens the page in a headless browser, lets it render once, and saves that as the live file, so the wiki's content is readable even before JavaScript runs, which helps both search engines and slower devices.",
+  },
+  {
+    title: "About Evolved PWI",
+    body: "Add general server notes here: rules, rates, community links, or anything else worth keeping in one place.",
+  },
 ];
 
 // ---- EXCHANGE RATES ----
@@ -1784,6 +1976,76 @@ document.getElementById("ratesBtn").addEventListener("click", showRatesPage);
 document.getElementById("ratesBackBtn").addEventListener("click", hideRatesPage);
 
 // ============================================================================
+// NOTES PAGE — same full-page-swap pattern as the Rates page.
+// ============================================================================
+function renderNotes() {
+  const list = document.getElementById("notesPageList");
+  if (!list) return;
+  list.innerHTML = NOTES.map(n => `
+    <div class="note-item">
+      <div class="note-item-title">${n.title}</div>
+      <div class="note-item-body">${n.body}</div>
+    </div>`).join("");
+}
+
+function showNotesPage() {
+  document.getElementById("appShell").classList.add("hidden");
+  document.getElementById("notesPage").classList.remove("hidden");
+}
+
+function hideNotesPage() {
+  document.getElementById("notesPage").classList.add("hidden");
+  document.getElementById("appShell").classList.remove("hidden");
+}
+
+document.getElementById("notesBtn").addEventListener("click", showNotesPage);
+document.getElementById("notesBackBtn").addEventListener("click", hideNotesPage);
+
+// ============================================================================
+// CONTACT FORM — submits to Formspree via fetch() so the visitor never
+// leaves the page; status message is shown inline instead.
+// ============================================================================
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById("contactFormSubmit");
+    const status = document.getElementById("contactFormStatus");
+
+    if (FORMSPREE_ENDPOINT.includes("REPLACE-WITH-YOUR-FORM-ID")) {
+      status.textContent = "Form isn't connected yet. Set FORMSPREE_ENDPOINT in the code.";
+      status.className = "contact-form-status error";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    status.textContent = "Sending…";
+    status.className = "contact-form-status";
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        status.textContent = "Sent! Thanks for the heads up.";
+        status.className = "contact-form-status success";
+        contactForm.reset();
+      } else {
+        status.textContent = "Something went wrong. Try again, or reach out on Discord instead.";
+        status.className = "contact-form-status error";
+      }
+    } catch (err) {
+      status.textContent = "Something went wrong. Try again, or reach out on Discord instead.";
+      status.className = "contact-form-status error";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+// ============================================================================
 // LANDING PAGE
 // ============================================================================
 function renderLandingStats() {
@@ -1853,6 +2115,7 @@ try {
   validateCategories();
   renderReferences();
   renderRates();
+  renderNotes();
   renderCategoryFilters();
   renderLandingStats();
   render();
