@@ -284,10 +284,12 @@
     color: var(--text-faint);
   }
 
-  /* Card-grid layout used at every viewport width: each entry is its own
-     bordered, rounded box (previously mobile-only), and boxes flow into
-     as many columns as the container comfortably fits. On a narrow phone
-     that's naturally 1 column; on a wide desktop it's 3-4. */
+  /* Card-grid layout — used below the DESKTOP TABLE LAYOUT breakpoint
+     further down this file (currently 880px). Below that width, each
+     entry is its own bordered, rounded box, flowing into as many columns
+     as the container comfortably fits (1 on a phone, 2-3 on a tablet).
+     At 880px+ this is replaced by aligned table rows — see that block for
+     why, and for the shared grid-template-columns all rows use. */
   .entry-table {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -522,6 +524,54 @@
       margin-bottom: 12px;
     }
     .ref-panel { top: 80px; }
+  }
+
+  /* ---- DESKTOP TABLE LAYOUT ----
+     Below 880px, entries stay as the boxed card grid above. At 880px+,
+     three-plus columns of tall bordered boxes (each repeating its own
+     "Level / Reward / Freq" labels) is what reads as cluttered on a big
+     screen, so this replaces it with one aligned table: the head row
+     (already rendered in the markup, just hidden until now) becomes
+     visible so labels appear once instead of on every single row, and
+     boxes/borders are replaced by a single hairline divider between rows.
+     Every .row (data or head) is given the exact same
+     grid-template-columns, so columns line up across the whole table
+     without needing a real <table> element. */
+  @media (min-width: 880px) {
+    .entry-table { display: block; }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(170px, 1.3fr) minmax(130px, 1fr) minmax(210px, 1.7fr) minmax(110px, 0.8fr) minmax(190px, 1.6fr);
+      align-items: start;
+      gap: 0 18px;
+      padding: 11px 6px;
+      border: none;
+      border-bottom: 1px solid var(--rule-soft);
+      border-radius: 0;
+      background: transparent;
+    }
+    .row.clickable:hover { background: var(--panel); }
+
+    .row.head {
+      display: grid;
+      padding: 0 6px 8px;
+      border-bottom: 1px solid var(--rule);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+    }
+
+    /* The head row now names each column, so the per-field inline labels
+       (added via ::before for the boxed-card layout) would be redundant
+       here — turn them off. */
+    .col-level::before, .col-reward::before, .col-boss::before,
+    .col-freq::before, .col-drop::before, .col-title::before,
+    .col-location::before { content: none; }
+
+    .col-notes, .col-title { margin-top: 0; }
   }
 
   /* ---- LANDING PAGE ---- */
