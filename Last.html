@@ -173,7 +173,7 @@
     white-space: nowrap;
   }
 
-  .topbar-inner { max-width: 980px; margin: 0 auto; }
+  .topbar-inner { max-width: 1200px; margin: 0 auto; }
 
   .brand {
     display: flex;
@@ -254,7 +254,7 @@
   }
 
   main {
-    max-width: 980px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 24px 20px 80px;
   }
@@ -284,29 +284,32 @@
     color: var(--text-faint);
   }
 
-  .entry-table { width: 100%; border-collapse: collapse; }
+  /* Card-grid layout used at every viewport width: each entry is its own
+     bordered, rounded box (previously mobile-only), and boxes flow into
+     as many columns as the container comfortably fits. On a narrow phone
+     that's naturally 1 column; on a wide desktop it's 3-4. */
+  .entry-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    align-items: start;
+  }
 
   .row {
-    display: grid;
-    grid-template-columns: 1.8fr 0.6fr 0.7fr 1fr 1.3fr;
-    gap: 12px;
-    align-items: center;
-    padding: 12px 10px;
-    border-radius: 6px;
-    transition: background 0.12s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 12px;
+    border: 1px solid var(--rule-soft);
+    border-radius: 8px;
+    background: var(--bg-alt);
+    transition: background 0.12s ease, border-color 0.12s ease;
   }
-  .row:hover { background: var(--panel); }
-  .row + .row { border-top: 1px solid var(--rule-soft); }
+  .row:hover { background: var(--panel); border-color: var(--rule); }
 
-  .row.head {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-faint);
-    padding-bottom: 8px;
-  }
-  .row.head:hover { background: none; }
+  /* The head row lists column names for the old table layout; the card
+     layout labels each field individually via ::before below instead. */
+  .row.head { display: none; }
 
   .col-name { font-weight: 500; font-size: 14px; }
   .name-abbr {
@@ -321,8 +324,16 @@
     font-size: 12.5px;
     color: var(--text-dim);
   }
-  .col-notes { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; }
-  .col-title { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; }
+  .col-notes { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; margin-top: 2px; }
+  .col-title { font-size: 12.5px; color: var(--text-faint); line-height: 1.4; margin-top: 2px; }
+
+  .col-level::before { content: "Level  "; color: var(--text-faint); }
+  .col-reward::before { content: "Reward  "; color: var(--text-faint); }
+  .col-boss::before { content: "Boss/Mob  "; color: var(--text-faint); }
+  .col-freq::before { content: "Freq  "; color: var(--text-faint); }
+  .col-drop::before { content: "Drop Chance  "; color: var(--text-faint); }
+  .col-title::before { content: "Title - "; color: var(--text-faint); }
+  .col-location::before { content: "Location  "; color: var(--text-faint); }
 
   .reward-chips {
     display: inline-flex;
@@ -496,20 +507,7 @@
   .task-rewards { font-size: 12.5px; color: var(--text-dim); line-height: 1.4; }
 
   @media (max-width: 700px) {
-    .row { grid-template-columns: 1fr; gap: 4px; padding: 14px 12px; }
-    .row.head { display: none; }
     .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-notes, .col-title, .col-location { font-size: 12px; }
-    .col-level::before { content: "Level  "; color: var(--text-faint); }
-    .col-reward::before { content: "Reward  "; color: var(--text-faint); }
-    .col-boss::before { content: "Boss/Mob  "; color: var(--text-faint); }
-    .col-freq::before { content: "Freq  "; color: var(--text-faint); }
-    .col-drop::before { content: "Drop Chance  "; color: var(--text-faint); }
-    .col-title::before { content: "Title - "; color: var(--text-faint); }
-    .col-location::before { content: "Location  "; color: var(--text-faint); }
-    .col-notes { margin-top: 2px; }
-    .col-title { margin-top: 2px; }
-    .row { border: 1px solid var(--rule-soft); margin-bottom: 8px; border-radius: 8px; }
-    .row + .row { border-top: 1px solid var(--rule-soft); }
 
     /* Buttons were absolutely positioned over the brand title on narrow
        screens (title text is long enough to run under them). On mobile,
