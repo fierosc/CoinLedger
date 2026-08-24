@@ -172,15 +172,6 @@
     font-weight: 500;
     white-space: nowrap;
   }
-  .rates-updated {
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid var(--rule-soft);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--text-faint);
-    text-align: center;
-  }
 
   .topbar-inner { max-width: 980px; margin: 0 auto; }
 
@@ -473,6 +464,7 @@
     align-items: center;
     gap: 6px;
     margin-top: 6px;
+    margin-right: 8px;
     padding: 8px 14px;
     background: rgba(200,155,74,0.12);
     border: 1px solid rgba(200,155,74,0.4);
@@ -513,7 +505,6 @@
     .col-freq::before { content: "Freq  "; color: var(--text-faint); }
     .col-drop::before { content: "Drop Chance  "; color: var(--text-faint); }
     .col-title::before { content: "Title - "; color: var(--text-faint); }
-    .col-freq::before { content: "Freq  "; color: var(--text-faint); }
     .col-location::before { content: "Location  "; color: var(--text-faint); }
     .col-notes { margin-top: 2px; }
     .col-title { margin-top: 2px; }
@@ -723,6 +714,24 @@
     font-size: 13.5px;
     color: var(--text-dim);
     line-height: 1.6;
+  }
+
+  .note-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+  }
+  .note-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 3px;
+  }
+  .note-stat-value { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+  @media (max-width: 700px) {
+    .note-stats { grid-template-columns: 1fr; }
   }
   .notes-page-back {
     font-family: 'IBM Plex Mono', monospace;
@@ -1118,6 +1127,7 @@ const EVENT_GOLD_ENTRIES = [
     egValue: 11, // upper bound of the range
     freq: "1x/day",
     notes: "Speed/decision-based, automated event",
+    link: "https://evolvedpw.com/database/article/jungle-ruins-race",
   },
   {
     name: "Sunset Valley (Tank Wars)",
@@ -1127,6 +1137,7 @@ const EVENT_GOLD_ENTRIES = [
     egValue: 10, // upper bound of the range (top rank)
     freq: "Ranked event",
     notes: "",
+    link: "https://evolvedpw.com/database/article/sunset-valley-tank-wars",
   },
   {
     name: "Celestial Tiger Event",
@@ -1136,6 +1147,8 @@ const EVENT_GOLD_ENTRIES = [
     egValue: 10, // upper bound of the range (1st place)
     freq: "Mondays",
     notes: "",
+    link: "https://evolvedpw.com/database/article/celestial-tigers-event",
+    link2: "https://pwi.fandom.com/wiki/Celestial_Tiger_Event",
   },
   MOLTEN_MINES_1_ENTRY,
   MOLTEN_MINES_2_ENTRY,
@@ -1144,10 +1157,27 @@ const EVENT_GOLD_ENTRIES = [
     name: "Cultivation Quest-Chain",
     stages: ["M", "L"],
     level: "19+",
-    reward: "~21.35 EG total",
+    reward: "21.35 EG total",
     egValue: 21.35,
     freq: "One-time",
-    notes: "Base chain + Sage/Demon branch",
+    notesShort: "Base chain + one Sage/Demon branch (see details)",
+    notes: "Base chain (8 steps, 10.6 EG) plus one Sage or Demon branch (3 steps, 10.75 EG).",
+    breakdown: [
+      { task: 1, title: "1. Spiritual Adept", rewards: ["0.15 EG"] },
+      { task: 2, title: "2. Aware of Principle", rewards: ["0.25 EG"] },
+      { task: 3, title: "3. Aware of Harmony", rewards: ["0.45 EG"] },
+      { task: 4, title: "4. Aware of Discord", rewards: ["0.75 EG"] },
+      { task: 5, title: "5. Aware of Coalescence", rewards: ["1.25 EG"] },
+      { task: 6, title: "6. Transcendent", rewards: ["2.25 EG"] },
+      { task: 7, title: "7. Enlightened One", rewards: ["2.5 EG"] },
+      { task: 8, title: "8. Aware of Vacuity", rewards: ["3 EG"] },
+      { task: 9, title: "Demon: Aware of the Void", rewards: ["3.25 EG"] },
+      { task: 10, title: "Demon: Master of Discord", rewards: ["3.5 EG"] },
+      { task: 11, title: "Demon: Celestial Demon", rewards: ["4 EG"] },
+      { task: 12, title: "Sage: Aware of the Myriad", rewards: ["3.25 EG"] },
+      { task: 13, title: "Sage: Master of Harmony", rewards: ["3.5 EG"] },
+      { task: 14, title: "Sage: Celestial Sage", rewards: ["4 EG"] },
+    ],
   },
   UNDISCOVERED_DUNGEON_ENTRY,
   UNCHARTED_PARADISE_ENTRY,
@@ -1178,6 +1208,7 @@ const DUNGEONS_INSTANCES_ENTRIES = [
     freq: "Unlimited entries; daily quest 1x/day",
     notes: "",
     link: "https://evolvedpw.com/database/article/flowsilver-palace",
+    link2: "https://pwi.fandom.com/wiki/Flowsilver_Palace",
   },
   ICEBOUND_UNDERWORLD_ENTRY,
   UNCHARTED_PARADISE_ENTRY,
@@ -1417,6 +1448,7 @@ const MOLD_FARMING_ENTRIES = [
 const MISCELLANEOUS_ENTRIES = [
   {
     name: "Decomposing NPC Gear",
+    stages: ["E", "M", "L"],
     level: "Blacksmith/Tailor skill",
     reward: "Perfect Stones, Pakua Stones",
     egValue: null,
@@ -1426,6 +1458,7 @@ const MISCELLANEOUS_ENTRIES = [
   },
   {
     name: "Sovereign's Seal",
+    stages: ["L"],
     level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89, unconfirmed)",
     reward: "2x Sigil of Nightbloom per day",
     egValue: null,
@@ -1470,6 +1503,7 @@ const CATEGORIES = [
 const REFERENCES = [
   { title: "Evolved PWI", url: "https://evolvedpw.com" },
   { title: "PWDatabase", url: "https://www.pwdatabase.com" },
+  { title: "PWI Fandom Wiki", url: "https://pwi.fandom.com" },
 ];
 
 // ---- CONTACT FORM ----
@@ -1492,7 +1526,14 @@ const NOTES = [
   },
   {
     title: "About Evolved PWI",
-    body: "Add general server notes here: rules, rates, community links, or anything else worth keeping in one place.",
+    stats: [
+      { label: "Rates", value: "2x drops, EXP, spirit, coins, quest EXP/spirit" },
+      { label: "Classes", value: "16" },
+      { label: "Races", value: "6" },
+      { label: "Gear cap", value: "R9R4 or R8RR" },
+      { label: "Removed", value: "Starchart items, Avatar Cards, G17 Weapons" },
+      { label: "Launched", value: "July 11, 2020" },
+    ],
   },
 ];
 
@@ -1644,6 +1685,7 @@ function matchesFilters(entry) {
   const searchOk = !searchTerm ||
     entry.name.toLowerCase().includes(searchTerm) ||
     (entry.abbr || "").toLowerCase().includes(searchTerm) ||
+    (entry.reward || "").toLowerCase().includes(searchTerm) ||
     (entry.notes || "").toLowerCase().includes(searchTerm);
   return searchOk;
 }
@@ -1889,6 +1931,9 @@ function openModal(name, categoryKeyHint) {
     ${entry.link ? `
     <a class="modal-link" href="${entry.link}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link)}</a>
     ` : ""}
+    ${entry.link2 ? `
+    <a class="modal-link" href="${entry.link2}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link2)}</a>
+    ` : ""}
   `;
   document.getElementById("modalBackdrop").classList.add("open");
   document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
@@ -1984,7 +2029,15 @@ function renderNotes() {
   list.innerHTML = NOTES.map(n => `
     <div class="note-item">
       <div class="note-item-title">${n.title}</div>
-      <div class="note-item-body">${n.body}</div>
+      ${n.stats ? `
+      <div class="note-stats">
+        ${n.stats.map(s => `
+        <div>
+          <div class="note-stat-label">${s.label}</div>
+          <div class="note-stat-value">${s.value}</div>
+        </div>`).join("")}
+      </div>` : `
+      <div class="note-item-body">${n.body}</div>`}
     </div>`).join("");
 }
 
@@ -2155,8 +2208,7 @@ try {
         'border-radius:8px;background:#1A1D29;color:#ECE8DD;font-family:sans-serif;">' +
         '<div style="font-size:17px;margin-bottom:8px;">⚠ The page failed to load</div>' +
         '<div style="font-size:13px;color:#9498A8;line-height:1.5;">' +
-        'This means the main script has a JavaScript error that stopped it from running at all ' +
-        '\u2014 most often a missing bracket, brace, or comma from a recent edit to the data. ' +
+        'This means the main script has a JavaScript error that stopped it from running at all, most often a missing bracket, brace, or comma from a recent edit to the data. ' +
         'Open the browser console (F12, then the Console tab) to see the exact error and line number.' +
         '</div></div>';
     }
