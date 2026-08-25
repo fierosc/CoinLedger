@@ -83,7 +83,7 @@
     z-index: 20;
   }
 
-  .ref-btn, .rates-btn, .notes-btn {
+  .ref-btn, .rates-btn, .notes-btn, .dailies-btn {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     padding: 6px 12px;
@@ -92,8 +92,30 @@
     background: transparent;
     color: var(--text-dim);
     cursor: pointer;
+    position: relative;
   }
-  .ref-btn:hover, .rates-btn:hover, .notes-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .ref-btn:hover, .rates-btn:hover, .notes-btn:hover, .dailies-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .ref-btn .btn-icon, .rates-btn .btn-icon, .notes-btn .btn-icon, .dailies-btn .btn-icon {
+    width: 12px;
+    height: 12px;
+    vertical-align: -1.5px;
+    margin-right: 5px;
+    color: var(--text-faint);
+    transition: color 0.15s ease;
+  }
+  .ref-btn:hover .btn-icon, .rates-btn:hover .btn-icon, .notes-btn:hover .btn-icon, .dailies-btn:hover .btn-icon { color: var(--gold-bright); }
+  .dailies-btn.has-pins .btn-icon { color: var(--gold-bright); }
+  .dailies-btn.has-pins { border-color: var(--gold); color: var(--gold-bright); }
+  .dailies-count {
+    display: inline-block;
+    font-size: 9.5px;
+    background: var(--gold);
+    color: #14161F;
+    border-radius: 999px;
+    padding: 0 5px;
+    margin-left: 4px;
+    font-weight: 600;
+  }
 
   .ref-panel {
     display: none;
@@ -256,10 +278,17 @@
   main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 20px 80px;
+    padding: 16px 20px 80px;
   }
 
-  .category-block { margin-bottom: 40px; }
+  /* Category filter chips specifically (not the Sort row above them, which
+     keeps its normal .chip size) — a tighter gap and smaller chip footprint
+     here means fewer wrapped lines on a phone width, so there's less dead
+     space between the topbar and the first category's actual content. */
+  #categoryFilters { gap: 6px; }
+  #categoryFilters .chip { padding: 5px 10px; font-size: 11.5px; }
+
+  .category-block { margin-bottom: 32px; }
 
   /* A bold, hard-to-miss break between categories as you scroll — much
      stronger than category-head's own hairline underline just below,
@@ -270,12 +299,12 @@
      very first category block — nothing above it to separate from. */
   .category-block + .category-block {
     position: relative;
-    padding-top: 46px;
+    padding-top: 38px;
   }
   .category-block + .category-block::before {
     content: "";
     position: absolute;
-    top: 20px;
+    top: 16px;
     left: 0;
     right: 0;
     height: 1px;
@@ -285,7 +314,7 @@
   .category-block + .category-block::after {
     content: "◈";
     position: absolute;
-    top: 11px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--bg);
@@ -332,10 +361,11 @@
   }
 
   .row {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 14px 12px;
+    padding: 14px 34px 14px 12px;
     border: 1px solid var(--rule-soft);
     border-radius: 8px;
     background: var(--bg-alt);
@@ -347,13 +377,49 @@
      layout labels each field individually via ::before below instead. */
   .row.head { display: none; }
 
-  .col-name { font-weight: 500; font-size: 14px; }
+  .col-name { font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+  .col-name-text { min-width: 0; }
   .name-abbr {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     font-weight: 400;
     color: var(--text-faint);
     margin-left: 4px;
+  }
+
+  /* Pin-to-Dailies toggle. Mirrors the site's existing .chip.active
+     styling (gold fill, dark glyph) so a pinned entry reads the same way
+     an active filter chip does elsewhere on the page. On the card layout
+     (below 880px, incl. mobile) it detaches from the name and sits as a
+     small badge in the row's top-right corner instead — see the media
+     query below. At 880px+ it stays inline before the name (see
+     DESKTOP TABLE LAYOUT further down). */
+  .pin-btn {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+  }
+  .pin-btn svg { width: 10px; height: 10px; display: block; }
+  .pin-btn:hover { color: var(--gold-bright); border-color: var(--gold); }
+  .pin-btn.pinned { background: var(--gold); border-color: var(--gold); color: #14161F; }
+  .pin-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+  @media (max-width: 879px) {
+    .pin-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
   }
   .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-location {
     font-family: 'IBM Plex Mono', monospace;
@@ -523,6 +589,24 @@
   }
   .modal-link:hover { background: rgba(200,155,74,0.22); }
 
+  .modal-pin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    cursor: pointer;
+  }
+  .modal-pin-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .modal-pin-btn.pinned { border-color: var(--gold); background: rgba(200,155,74,0.12); color: var(--gold-bright); }
+  .modal-pin-btn svg { width: 12px; height: 12px; vertical-align: -1.5px; margin-right: 2px; }
+
   .task-list { display: flex; flex-direction: column; gap: 8px; }
   .task-row {
     background: var(--bg-alt);
@@ -691,6 +775,7 @@
   .rates-page.hidden { display: none; }
   .rates-page-inner { text-align: center; max-width: 420px; width: 100%; }
   .rates-page-mark { font-size: 34px; color: var(--gold); margin-bottom: 14px; }
+  .rates-page-mark svg, .notes-page-mark svg { width: 30px; height: 30px; display: block; margin: 0 auto; }
   .rates-page-title {
     font-family: 'Fraunces', serif;
     font-weight: 600;
@@ -897,6 +982,290 @@
     color: var(--text-dim);
   }
   .discord-contact strong { color: var(--gold-bright); font-weight: 500; }
+
+  /* ---- DAILIES PAGE ----
+     Reuses the .notes-page / .notes-page-inner / .notes-page-mark /
+     .notes-page-title / .notes-page-sub / .notes-page-back / .rates-page-note
+     classes above for the shared page chrome (background, centering,
+     typography) — only the checklist-specific pieces below are new. */
+  .dailies-page-inner { max-width: 640px; }
+
+  .dailies-purpose {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+    text-align: left;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 700px) {
+    .dailies-purpose { font-size: 12.5px; line-height: 1.5; }
+  }
+
+  .dailies-streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+  }
+  .dailies-streak svg { width: 14px; height: 14px; color: var(--text-faint); flex-shrink: 0; }
+  .dailies-streak #dailiesStreakNum { color: var(--text); font-weight: 500; margin: 0 1px; }
+  .dailies-streak.complete { border-color: var(--gold); background: rgba(200,155,74,0.12); color: var(--gold-bright); }
+  .dailies-streak.complete svg, .dailies-streak.complete #dailiesStreakNum { color: var(--gold-bright); }
+
+  .dailies-add { position: relative; margin-bottom: 18px; text-align: left; }
+  .dailies-add-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+  .dailies-add-input::placeholder { color: var(--text-faint); }
+  .dailies-add-input:focus { outline: none; border-color: var(--gold); }
+  .dailies-add-results {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    z-index: 5;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .dailies-add-results.open { display: block; }
+  .dailies-add-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--text);
+    padding: 9px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .dailies-add-result:last-child { border-bottom: none; }
+  .dailies-add-result:hover { background: var(--panel-hover); color: var(--gold-bright); }
+  .dailies-add-result-cat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .dailies-add-empty { padding: 10px 12px; font-size: 12.5px; color: var(--text-faint); }
+
+  .dailies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+    margin-bottom: 18px;
+  }
+  .daily-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .daily-item.checked { opacity: 0.5; }
+  .daily-check {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--gold-bright);
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .daily-item.checked .daily-check { background: var(--gold); border-color: var(--gold); color: #14161F; }
+  .daily-info { flex: 1; min-width: 0; }
+  .daily-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .daily-item.checked .daily-name { text-decoration: line-through; }
+  .daily-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+  .daily-reorder { display: flex; flex-direction: column; flex-shrink: 0; }
+  .daily-move {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-size: 10px;
+    line-height: 1.3;
+    cursor: pointer;
+    padding: 1px 4px;
+  }
+  .daily-move:hover:not(:disabled) { color: var(--gold-bright); }
+  .daily-move:disabled { opacity: 0.25; cursor: default; }
+  .daily-remove {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .daily-remove:hover { color: var(--bronze); }
+
+  .dailies-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: var(--text-faint);
+    font-size: 13px;
+    background: var(--panel);
+    border: 1px dashed var(--rule);
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+
+  .dailies-actions { margin-bottom: 22px; }
+  .dailies-reset-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .dailies-reset-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+
+  /* ---- SYNC PANEL ---- */
+  .dailies-sync {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+  }
+  .dailies-sync-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
+  }
+  .dailies-sync-desc {
+    font-size: 12.5px;
+    color: var(--text-faint);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .dailies-sync-desc a { color: var(--text-dim); text-decoration: underline; }
+  .dailies-sync-desc a:hover { color: var(--gold-bright); }
+
+  .dailies-sync-create-btn, .dailies-sync-copy-btn, .dailies-sync-connect-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .dailies-sync-create-btn:hover, .dailies-sync-copy-btn:hover, .dailies-sync-connect-btn:hover { background: var(--gold); color: #14161F; }
+
+  .dailies-sync-disconnect-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+  }
+  .dailies-sync-disconnect-btn:hover { color: var(--bronze); }
+
+  .dailies-sync-code-row { display: flex; gap: 8px; margin-top: 4px; }
+  .dailies-sync-code-input {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--rule);
+    color: var(--text-dim);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+
+  .dailies-sync-connect-row { display: flex; gap: 8px; margin-top: 14px; }
+  .dailies-sync-connect-input {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+  .dailies-sync-connect-input::placeholder { color: var(--text-faint); }
+  .dailies-sync-connect-input:focus, .dailies-sync-code-input:focus { outline: none; border-color: var(--gold); }
+
+  .dailies-sync-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    min-height: 14px;
+    margin-top: 10px;
+  }
+  .dailies-sync-status.sync-status-error { color: var(--bronze); }
+  .dailies-sync-fine-print {
+    font-size: 11.5px;
+    color: var(--text-faint);
+    line-height: 1.55;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-soft);
+  }
 </style>
 </head>
 <body>
@@ -921,9 +1290,10 @@
       <span class="mark" id="brandHome" role="button" tabindex="0">The Coin Ledger</span>
     </div>
     <div class="topbar-actions">
-      <button class="rates-btn" id="ratesBtn">💱 Rates</button>
-      <button class="ref-btn" id="refBtn">📚 References</button>
-      <button class="notes-btn" id="notesBtn">📝 Notes</button>
+      <button class="rates-btn" id="ratesBtn"><svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"/></svg>Rates</button>
+      <button class="ref-btn" id="refBtn"><svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>References</button>
+      <button class="notes-btn" id="notesBtn"><svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Notes</button>
+      <button class="dailies-btn" id="dailiesBtn"><svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>Dailies<span class="dailies-count" id="dailiesCount" style="display:none;"></span></button>
     </div>
     <input class="search" id="search" type="text" placeholder="Search methods…" />
     <div class="filter-row" id="sortFilters" style="margin-top: 8px;">
@@ -945,7 +1315,7 @@
 </div>
 
 <main>
-  <div class="filter-row" id="categoryFilters" style="margin-bottom: 20px;"></div>
+  <div class="filter-row" id="categoryFilters" style="margin-bottom: 10px;"></div>
   <div id="content"></div>
 </main>
 
@@ -953,7 +1323,7 @@
 
 <div class="rates-page hidden" id="ratesPage">
   <div class="rates-page-inner">
-    <div class="rates-page-mark">💱</div>
+    <div class="rates-page-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"/></svg></div>
     <h2 class="rates-page-title">Exchange Rates</h2>
     <div class="rates-page-sub">EVOLVED PWI</div>
     <div class="rates-page-list" id="ratesPageList"></div>
@@ -965,7 +1335,7 @@
 
 <div class="notes-page hidden" id="notesPage">
   <div class="notes-page-inner">
-    <div class="notes-page-mark">📝</div>
+    <div class="notes-page-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
     <h2 class="notes-page-title">Notes</h2>
     <div class="notes-page-sub">EVOLVED PWI</div>
     <div class="notes-page-list" id="notesPageList"></div>
@@ -990,6 +1360,53 @@
     <button class="notes-page-back" id="notesBackBtn">← Back to the Ledger</button>
   </div>
 </div>
+
+<div class="notes-page dailies-page hidden" id="dailiesPage">
+  <div class="notes-page-inner dailies-page-inner">
+    <div class="notes-page-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg></div>
+    <h2 class="notes-page-title">Dailies</h2>
+    <div class="notes-page-sub">EVOLVED PWI</div>
+    <div class="dailies-streak" id="dailiesStreak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg><span id="dailiesStreakNum">0</span> day streak</div>
+    <div class="dailies-purpose">The Ledger covers (almost) every way to make coin, but you're not running all of it every day. Pin whatever you actually do: dungeons, dailies, farms, whatever. Arrange it in order and knock it out like a checklist.</div>
+    <div class="rates-page-note">Tap the pin icon on any method in the Ledger (or search below) to pin it here. Reorder with the arrows and check items off as you finish them — the list lives only on this device and unchecks itself automatically at 20:00 server time, same as the actual server reset.</div>
+
+    <div class="dailies-add">
+      <input class="dailies-add-input" id="dailiesAddInput" type="text" placeholder="Search methods to pin…" autocomplete="off">
+      <div class="dailies-add-results" id="dailiesAddResults"></div>
+    </div>
+
+    <div class="dailies-list" id="dailiesList"></div>
+    <div class="dailies-empty" id="dailiesEmpty">Nothing pinned yet. Search above, or tap the pin icon on any method in the Ledger.</div>
+
+    <div class="dailies-actions">
+      <button class="dailies-reset-btn" id="dailiesResetBtn">Uncheck all</button>
+    </div>
+
+    <div class="dailies-sync">
+      <div class="dailies-sync-label">Sync across devices</div>
+      <div class="dailies-sync-desc">Optional. Carries your pinned list to another device using a free JSON host, not an account — just a code only you have. Read the fine print before relying on it: <a href="#" id="syncInfoLink">how this works</a>.</div>
+
+      <button class="dailies-sync-create-btn" id="syncCreateBtn" type="button">Create a sync code</button>
+
+      <div class="dailies-sync-code-row" id="syncCodeRow" style="display:none;">
+        <input class="dailies-sync-code-input" id="syncCodeBox" type="text" readonly aria-label="Your sync code">
+        <button class="dailies-sync-copy-btn" id="syncCopyBtn" type="button">Copy</button>
+      </div>
+      <button class="dailies-sync-disconnect-btn" id="syncDisconnectBtn" type="button" style="display:none;">Disconnect this device</button>
+
+      <div class="dailies-sync-connect-row">
+        <input class="dailies-sync-connect-input" id="syncConnectInput" type="text" placeholder="Paste a code from another device…" autocomplete="off">
+        <button class="dailies-sync-connect-btn" id="syncConnectBtn" type="button">Connect</button>
+      </div>
+
+      <div class="dailies-sync-status" id="syncStatus"></div>
+      <div class="dailies-sync-fine-print" id="syncFinePrint" style="display:none;">Connecting replaces this device's pinned list with whatever the code's owner last saved. Sync runs in the background after that on both devices — if you change the same item on two devices within about a minute of each other, whichever saves last wins; there's no merging. This relies on a small third-party JSON host, not a service run by this site — if it's ever down or discontinued, sync just quietly stops working and everything above keeps working locally as normal.</div>
+    </div>
+
+    <button class="notes-page-back" id="dailiesBackBtn">← Back to the Ledger</button>
+  </div>
+</div>
+
 
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal-panel" id="modalPanel"></div>
@@ -1693,6 +2110,217 @@ let activeCategory = "all";
 let activeSort = "default";
 let searchTerm = "";
 
+// ============================================================================
+// DAILIES / PINS — saved client-side (localStorage), so the pinned list and
+// checked-off state persist on this device across visits without any
+// server or account. If localStorage is unavailable (private browsing,
+// storage disabled, etc.) everything below falls back to an in-memory
+// array/object so the feature still works for the current page load.
+// ============================================================================
+const PINS_KEY = "coinLedgerPins";       // ordered array of {name, categoryKey}
+const CHECKED_KEY = "coinLedgerChecked"; // { "name||categoryKey": true }
+const RESET_KEY = "coinLedgerLastReset"; // "YYYY-MM-DD" of last auto-uncheck
+const STREAK_KEY = "coinLedgerStreak";   // integer, consecutive fully-completed days
+
+let pins = [];
+let checkedMap = {};
+let streak = 0;
+
+function pinKey(name, categoryKey) { return name + "||" + categoryKey; }
+
+// Small thumbtack icon (Material Design "push_pin" glyph) used for the
+// per-row/per-card pin toggle — an SVG so its color can follow currentColor
+// exactly (dim outline when unpinned, solid gold badge when pinned) rather
+// than relying on a fixed-color emoji glyph.
+const PIN_ICON_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg>';
+
+// Flame icon (Material Design "local_fire_department" glyph) for the streak
+// badge — same currentColor treatment as the pin icon above.
+const FLAME_ICON_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>';
+
+function loadPins() {
+  try {
+    const raw = localStorage.getItem(PINS_KEY);
+    pins = raw ? JSON.parse(raw) : [];
+  } catch (e) { pins = []; }
+}
+function savePins() {
+  try { localStorage.setItem(PINS_KEY, JSON.stringify(pins)); } catch (e) {}
+}
+function loadChecked() {
+  try {
+    const raw = localStorage.getItem(CHECKED_KEY);
+    checkedMap = raw ? JSON.parse(raw) : {};
+  } catch (e) { checkedMap = {}; }
+}
+function saveChecked() {
+  try { localStorage.setItem(CHECKED_KEY, JSON.stringify(checkedMap)); } catch (e) {}
+}
+function loadStreak() {
+  try {
+    const raw = localStorage.getItem(STREAK_KEY);
+    streak = raw ? (parseInt(raw, 10) || 0) : 0;
+  } catch (e) { streak = 0; }
+}
+function saveStreak() {
+  try { localStorage.setItem(STREAK_KEY, String(streak)); } catch (e) {}
+}
+
+// True when every currently pinned item is checked off — used both to
+// decide whether today "counts" at the next reset, and to show the +1 the
+// streak badge previews live, before that reset actually banks it.
+function pinsCompleteNow() {
+  return pins.length > 0 && pins.every(p => checkedMap[pinKey(p.name, p.categoryKey)]);
+}
+
+function isPinned(name, categoryKey) {
+  return pins.some(p => p.name === name && p.categoryKey === categoryKey);
+}
+
+function togglePin(name, categoryKey) {
+  const idx = pins.findIndex(p => p.name === name && p.categoryKey === categoryKey);
+  if (idx === -1) {
+    pins.push({ name, categoryKey });
+  } else {
+    pins.splice(idx, 1);
+    delete checkedMap[pinKey(name, categoryKey)];
+    saveChecked();
+  }
+  savePins();
+  renderDailies(); // also syncs pin buttons/badge via its own trailing syncPinUI() call
+  schedulePush();
+}
+
+function removePin(name, categoryKey) {
+  pins = pins.filter(p => !(p.name === name && p.categoryKey === categoryKey));
+  delete checkedMap[pinKey(name, categoryKey)];
+  savePins();
+  saveChecked();
+  renderDailies();
+  schedulePush();
+}
+
+function movePin(index, direction) {
+  const target = index + direction;
+  if (target < 0 || target >= pins.length) return;
+  [pins[index], pins[target]] = [pins[target], pins[index]];
+  savePins();
+  renderDailies();
+  schedulePush();
+}
+
+function toggleChecked(name, categoryKey) {
+  const key = pinKey(name, categoryKey);
+  checkedMap[key] = !checkedMap[key];
+  saveChecked();
+  renderDailies();
+  schedulePush();
+}
+
+
+// Reads the current wall-clock date/hour in a given IANA time zone (e.g.
+// "America/New_York") using Intl, so this works off the actual local time
+// in that zone — including its Daylight Saving transitions — rather than a
+// fixed UTC offset that would be wrong for half the year.
+function zonedParts(date, timeZone) {
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", hour12: false,
+  });
+  const map = {};
+  fmt.formatToParts(date).forEach(p => { if (p.type !== "literal") map[p.type] = p.value; });
+  let hour = parseInt(map.hour, 10);
+  if (hour === 24) hour = 0; // some locales render midnight as "24" with hour12:false
+  return { year: parseInt(map.year, 10), month: parseInt(map.month, 10), day: parseInt(map.day, 10), hour };
+}
+
+// The Dailies checklist resets at 6:00 PM Eastern (America/New_York) — the
+// same real-world instant for every visitor no matter their own time zone,
+// matching the server's actual reset. Each 18:00 ET boundary opens a new
+// "bucket" running until the next day's 18:00 ET; this returns that
+// bucket's date label (the NY-local date the current period started on),
+// so two visitors in different time zones who load the page in the same
+// period always get the same label, and it flips the instant 6pm ET hits.
+function currentResetBucket() {
+  const { year, month, day, hour } = zonedParts(new Date(), "America/New_York");
+  // A plain UTC-based Date used purely as a day-math scratchpad — its
+  // clock time is irrelevant, only its calendar date is used below.
+  const bucket = new Date(Date.UTC(year, month - 1, day));
+  if (hour < 18) {
+    // Before today's 6pm ET reset — still in the period that started
+    // yesterday at 6pm ET.
+    bucket.setUTCDate(bucket.getUTCDate() - 1);
+  }
+  const y = bucket.getUTCFullYear();
+  const m = String(bucket.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(bucket.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+// Auto-uncheck at the server's 6pm Eastern reset. Runs on load and on a
+// periodic check afterward (see the setInterval near INIT below) so a tab
+// left open across the reset moment still clears itself without a reload.
+// Returns true if a reset actually happened.
+function maybeAutoResetDaily() {
+  let bucket;
+  try {
+    bucket = currentResetBucket();
+  } catch (e) {
+    // Intl/time zone data unavailable in this environment — fall back to
+    // the visitor's own local calendar day rather than not resetting at all.
+    bucket = new Date().toDateString();
+  }
+  let lastReset = null;
+  try { lastReset = localStorage.getItem(RESET_KEY); } catch (e) {}
+  if (lastReset !== bucket) {
+    // Bank (or break) the streak for the day that's ending, using
+    // whatever was pinned/checked right up until this moment — before any
+    // of it gets wiped below. An empty pin list doesn't count either way;
+    // nothing was there to complete, so it shouldn't cost a streak either.
+    if (pins.length > 0) {
+      streak = pinsCompleteNow() ? streak + 1 : 0;
+      saveStreak();
+    }
+    checkedMap = {};
+    saveChecked();
+    try { localStorage.setItem(RESET_KEY, bucket); } catch (e) {}
+    schedulePush();
+    return true;
+  }
+  return false;
+}
+
+// Keeps every 📌 button on the page (row pins, the modal pin button, and
+// the topbar Dailies count) in sync with the `pins` array. Does NOT touch
+// the Dailies page's own list — that's renderDailies()'s job, and it calls
+// this function itself at the end, so this function must never call
+// renderDailies() (that pairing caused an infinite render loop when the
+// Dailies page was open — see commit history).
+function syncPinUI() {
+  document.querySelectorAll(".pin-btn[data-pin-name]").forEach(btn => {
+    btn.classList.toggle("pinned", isPinned(btn.dataset.pinName, btn.dataset.pinCat));
+  });
+  const modalPinBtn = document.getElementById("modalPinBtn");
+  if (modalPinBtn) {
+    const p = isPinned(modalPinBtn.dataset.pinName, modalPinBtn.dataset.pinCat);
+    modalPinBtn.classList.toggle("pinned", p);
+    modalPinBtn.innerHTML = PIN_ICON_SVG + (p ? "Pinned to Dailies" : "Pin to Dailies");
+  }
+  const countEl = document.getElementById("dailiesCount");
+  const dailiesBtn = document.getElementById("dailiesBtn");
+  if (countEl && dailiesBtn) {
+    if (pins.length > 0) {
+      countEl.textContent = pins.length;
+      countEl.style.display = "";
+      dailiesBtn.classList.add("has-pins");
+    } else {
+      countEl.style.display = "none";
+      dailiesBtn.classList.remove("has-pins");
+    }
+  }
+}
+
 function locationKey(entry) {
   // Notes are often formatted as "<Location> · <extra detail>"
   if (entry.notes && entry.notes.includes(" · ")) {
@@ -1746,12 +2374,22 @@ function sortEntries(list) {
   return list;
 }
 
+// Chip order for the category FILTER ROW only — deliberately different
+// from CATEGORIES' own order above (which controls the order categories
+// actually appear down the page, and stays Event Gold / Dungeons /
+// Mold Farming / Miscellaneous). This list only decides button order, so a
+// shorter label like "Mold Farming" can sit next to "Event Gold" and wrap
+// onto fewer lines on a phone, without reshuffling the page content itself.
+const CATEGORY_CHIP_ORDER = ["event-gold", "mold-farming", "dungeons-instances", "miscellaneous"];
+
 function renderCategoryFilters() {
   const container = document.getElementById("categoryFilters");
   const allChip = `<button class="chip active" data-cat="all">All Categories</button>`;
-  const chips = CATEGORIES.map(c =>
-    `<button class="chip" data-cat="${c.key}">${c.name}</button>`
-  ).join("");
+  const chips = CATEGORY_CHIP_ORDER
+    .map(key => CATEGORIES.find(c => c.key === key))
+    .filter(Boolean)
+    .map(c => `<button class="chip" data-cat="${c.key}">${c.name}</button>`)
+    .join("");
   container.innerHTML = allChip + chips;
   container.querySelectorAll(".chip").forEach(chip => {
     chip.addEventListener("click", () => {
@@ -1862,9 +2500,11 @@ function renderRow(entry, categoryKey) {
   const freqCol = isMoldFarming
     ? `<div class="col-drop">${entry.freq}</div>`
     : `<div class="col-freq">${entry.freq}</div>`;
+  const pinned = isPinned(entry.name, categoryKey);
+  const pinBtn = `<button class="pin-btn${pinned ? " pinned" : ""}" type="button" data-pin-name="${escapeAttr(entry.name)}" data-pin-cat="${escapeAttr(categoryKey)}" aria-label="${pinned ? "Unpin from Dailies" : "Pin to Dailies"}" title="${pinned ? "Unpin from Dailies" : "Pin to Dailies"}">${PIN_ICON_SVG}</button>`;
   return `
     <div class="row clickable" data-entry-key="${escapeAttr(entry.name)}" data-cat-key="${escapeAttr(categoryKey)}">
-      <div class="col-name">${nameHtml}</div>
+      <div class="col-name">${pinBtn}<span class="col-name-text">${nameHtml}</span></div>
       ${secondCol}
       ${renderRewardCell(entry, categoryKey)}
       ${freqCol}
@@ -1974,6 +2614,7 @@ function openModal(name, categoryKeyHint) {
     <button class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
     <div class="modal-title">${modalNameHtml}</div>
     <div class="modal-meta">${categoryName}</div>
+    <button class="modal-pin-btn${isPinned(entry.name, categoryKey) ? " pinned" : ""}" id="modalPinBtn" type="button" data-pin-name="${escapeAttr(entry.name)}" data-pin-cat="${escapeAttr(categoryKey)}">${PIN_ICON_SVG}${isPinned(entry.name, categoryKey) ? "Pinned to Dailies" : "Pin to Dailies"}</button>
     <div class="modal-field">
       <div class="modal-field-label">${isMoldFarming ? "Location" : "Level"}</div>
       <div class="modal-field-value">${isMoldFarming ? (location || "—") : entry.level}</div>
@@ -2019,6 +2660,9 @@ function openModal(name, categoryKeyHint) {
   `;
   document.getElementById("modalBackdrop").classList.add("open");
   document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+  document.getElementById("modalPinBtn").addEventListener("click", () => {
+    togglePin(entry.name, categoryKey);
+  });
 }
 
 function linkDomain(url) {
@@ -2038,6 +2682,12 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.getElementById("content").addEventListener("click", (e) => {
+  const pinBtn = e.target.closest(".pin-btn");
+  if (pinBtn) {
+    e.stopPropagation();
+    togglePin(pinBtn.dataset.pinName, pinBtn.dataset.pinCat);
+    return;
+  }
   const row = e.target.closest(".row.clickable");
   if (row && row.dataset.entryKey) openModal(row.dataset.entryKey, row.dataset.catKey);
 });
@@ -2135,6 +2785,336 @@ function hideNotesPage() {
 
 document.getElementById("notesBtn").addEventListener("click", showNotesPage);
 document.getElementById("notesBackBtn").addEventListener("click", hideNotesPage);
+
+// ============================================================================
+// DAILIES PAGE — same full-page-swap pattern as Rates/Notes. Lists every
+// pinned entry in user-chosen order with a checkbox, reorder arrows, and a
+// remove button, plus a search box to pin new entries directly from here.
+// All state lives in the `pins` / `checkedMap` module above.
+// ============================================================================
+function getAllEntriesFlat() {
+  const flat = [];
+  CATEGORIES.forEach(cat => {
+    cat.entries.forEach(entry => flat.push({ entry, categoryKey: cat.key, categoryName: cat.name }));
+  });
+  return flat;
+}
+
+function renderDailies() {
+  const list = document.getElementById("dailiesList");
+  const empty = document.getElementById("dailiesEmpty");
+  if (!list) return;
+
+  if (pins.length === 0) {
+    list.innerHTML = "";
+    empty.style.display = "";
+  } else {
+    empty.style.display = "none";
+    list.innerHTML = pins.map((p, i) => {
+      const found = findEntry(p.name, p.categoryKey);
+      if (!found) return ""; // stale pin pointing at a removed entry — skip
+      const { entry, categoryName } = found;
+      const key = pinKey(p.name, p.categoryKey);
+      const checked = !!checkedMap[key];
+      return `
+        <div class="daily-item${checked ? " checked" : ""}" data-pin-name="${escapeAttr(p.name)}" data-pin-cat="${escapeAttr(p.categoryKey)}" data-index="${i}">
+          <button class="daily-check" type="button" aria-label="${checked ? "Mark not done" : "Mark done"}">${checked ? "✓" : ""}</button>
+          <div class="daily-info">
+            <div class="daily-name">${entry.name}</div>
+            <div class="daily-meta">${categoryName} · ${entry.freq}</div>
+          </div>
+          <div class="daily-reorder">
+            <button class="daily-move" type="button" data-dir="-1" aria-label="Move up" ${i === 0 ? "disabled" : ""}>▲</button>
+            <button class="daily-move" type="button" data-dir="1" aria-label="Move down" ${i === pins.length - 1 ? "disabled" : ""}>▼</button>
+          </div>
+          <button class="daily-remove" type="button" aria-label="Remove from Dailies">✕</button>
+        </div>`;
+    }).join("");
+  }
+  renderStreak();
+  syncPinUI();
+}
+
+// Updates the streak badge at the top of the Dailies page. Shows the banked
+// streak (confirmed at the last 20:00 reset) plus a live +1 the instant
+// every pinned item is checked off today — so the number visibly ticks up
+// right when the last box gets checked, not tomorrow.
+function renderStreak() {
+  const num = document.getElementById("dailiesStreakNum");
+  const wrap = document.getElementById("dailiesStreak");
+  if (!num || !wrap) return;
+  const completeToday = pinsCompleteNow();
+  num.textContent = streak + (completeToday ? 1 : 0);
+  wrap.classList.toggle("complete", completeToday);
+}
+
+// ============================================================================
+// CROSS-DEVICE SYNC — optional, off by default. There's no backend here
+// (this is a static file on GitHub Pages), so this leans on jsonhosting.com,
+// a free anonymous JSON-storage API, purely as a bridge between a person's
+// own devices. It is NOT treated as durable storage: localStorage on each
+// device stays the source of truth, and if the third-party service is ever
+// unreachable, everything above still works exactly as before — sync just
+// silently fails to push/pull that round.
+//
+// The "sync code" a person copies between devices is just
+// base64(JSON.stringify({id, editKey})) — the id points at their record,
+// the editKey is what lets a device holding the code write to it (so
+// having the code is equivalent to having write access, same as a
+// password). Reads are public on this service, so treat the code with the
+// same care as a shareable link, not a secret login.
+// ============================================================================
+const SYNC_API = "https://jsonhosting.com/api/json";
+const SYNC_INFO_KEY = "coinLedgerSyncInfo"; // { id, editKey } | absent
+
+let syncInfo = null;
+let syncPushTimer = null;
+
+function loadSyncInfo() {
+  try {
+    const raw = localStorage.getItem(SYNC_INFO_KEY);
+    syncInfo = raw ? JSON.parse(raw) : null;
+  } catch (e) { syncInfo = null; }
+}
+function saveSyncInfo() {
+  try {
+    if (syncInfo) localStorage.setItem(SYNC_INFO_KEY, JSON.stringify(syncInfo));
+    else localStorage.removeItem(SYNC_INFO_KEY);
+  } catch (e) {}
+}
+
+function encodeSyncCode(info) {
+  try { return btoa(JSON.stringify(info)); } catch (e) { return ""; }
+}
+function decodeSyncCode(code) {
+  try {
+    const info = JSON.parse(atob(code.trim()));
+    if (info && typeof info.id === "string" && typeof info.editKey === "string") return info;
+  } catch (e) {}
+  return null;
+}
+
+function buildSyncPayload() {
+  return { pins, checkedMap, streak };
+}
+
+function applySyncPayload(data) {
+  if (!data || typeof data !== "object") return;
+  pins = Array.isArray(data.pins) ? data.pins : [];
+  checkedMap = (data.checkedMap && typeof data.checkedMap === "object") ? data.checkedMap : {};
+  streak = typeof data.streak === "number" ? data.streak : 0;
+  savePins();
+  saveChecked();
+  saveStreak();
+  renderDailies();
+  syncPinUI();
+}
+
+function setSyncStatus(state) {
+  const el = document.getElementById("syncStatus");
+  if (!el) return;
+  const messages = {
+    working: "Syncing…",
+    synced: "Synced just now.",
+    error: "Couldn't reach the sync server — your changes are still saved on this device.",
+    badcode: "That code doesn't look right — double check you copied the whole thing.",
+  };
+  el.textContent = messages[state] || "";
+  el.classList.toggle("sync-status-error", state === "error" || state === "badcode");
+}
+
+// Waits a beat after the last change before pushing, so a burst of clicks
+// (checking off several dailies in a row) sends one request instead of one
+// per click. No-ops entirely if this device hasn't set up sync.
+function schedulePush() {
+  if (!syncInfo) return;
+  clearTimeout(syncPushTimer);
+  syncPushTimer = setTimeout(pushSync, 1200);
+}
+
+async function pushSync() {
+  if (!syncInfo) return;
+  try {
+    const res = await fetch(`${SYNC_API}/${syncInfo.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-Edit-Key": syncInfo.editKey },
+      body: JSON.stringify(buildSyncPayload()),
+    });
+    setSyncStatus(res.ok ? "synced" : "error");
+  } catch (e) {
+    setSyncStatus("error");
+  }
+}
+
+async function createSyncCode() {
+  setSyncStatus("working");
+  try {
+    const res = await fetch(SYNC_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildSyncPayload()),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.id || !data.editKey) throw new Error("bad response");
+    syncInfo = { id: data.id, editKey: data.editKey };
+    saveSyncInfo();
+    renderSyncUI();
+    setSyncStatus("synced");
+  } catch (e) {
+    setSyncStatus("error");
+  }
+}
+
+// Joins whatever code came from another device: pulls that record down
+// (overwriting this device's local pins/checked/streak — the other
+// device's saved state wins on first connect) and adopts its id+editKey
+// so this device can push future changes to the same record too.
+async function connectSyncCode(code) {
+  const decoded = decodeSyncCode(code);
+  if (!decoded) { setSyncStatus("badcode"); return; }
+  setSyncStatus("working");
+  try {
+    const res = await fetch(`${SYNC_API}/${decoded.id}`);
+    if (!res.ok) throw new Error("not found");
+    const data = await res.json();
+    syncInfo = decoded;
+    saveSyncInfo();
+    applySyncPayload(data);
+    renderSyncUI();
+    setSyncStatus("synced");
+  } catch (e) {
+    setSyncStatus("error");
+  }
+}
+
+function disconnectSync() {
+  syncInfo = null;
+  saveSyncInfo();
+  renderSyncUI();
+  setSyncStatus("");
+}
+
+function renderSyncUI() {
+  const createBtn = document.getElementById("syncCreateBtn");
+  const codeRow = document.getElementById("syncCodeRow");
+  const codeBox = document.getElementById("syncCodeBox");
+  const disconnectBtn = document.getElementById("syncDisconnectBtn");
+  if (!createBtn) return;
+  if (syncInfo) {
+    codeBox.value = encodeSyncCode(syncInfo);
+    codeRow.style.display = "";
+    createBtn.style.display = "none";
+    disconnectBtn.style.display = "";
+  } else {
+    codeRow.style.display = "none";
+    createBtn.style.display = "";
+    disconnectBtn.style.display = "none";
+  }
+}
+
+document.getElementById("syncCreateBtn").addEventListener("click", createSyncCode);
+document.getElementById("syncDisconnectBtn").addEventListener("click", disconnectSync);
+document.getElementById("syncCopyBtn").addEventListener("click", () => {
+  const box = document.getElementById("syncCodeBox");
+  box.select();
+  if (navigator.clipboard) navigator.clipboard.writeText(box.value).catch(() => {});
+});
+document.getElementById("syncConnectBtn").addEventListener("click", () => {
+  const input = document.getElementById("syncConnectInput");
+  const code = input.value.trim();
+  if (!code) return;
+  connectSyncCode(code);
+  input.value = "";
+});
+document.getElementById("syncInfoLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  const el = document.getElementById("syncFinePrint");
+  el.style.display = el.style.display === "none" ? "" : "none";
+});
+
+function showDailiesPage() {
+  document.getElementById("appShell").classList.add("hidden");
+  document.getElementById("dailiesPage").classList.remove("hidden");
+  document.getElementById("dailiesAddInput").value = "";
+  document.getElementById("dailiesAddResults").classList.remove("open");
+  renderDailies();
+  renderSyncUI();
+}
+
+function hideDailiesPage() {
+  document.getElementById("dailiesPage").classList.add("hidden");
+  document.getElementById("appShell").classList.remove("hidden");
+}
+
+document.getElementById("dailiesBtn").addEventListener("click", showDailiesPage);
+document.getElementById("dailiesBackBtn").addEventListener("click", hideDailiesPage);
+
+document.getElementById("dailiesList").addEventListener("click", (e) => {
+  const item = e.target.closest(".daily-item");
+  if (!item) return;
+  const name = item.dataset.pinName;
+  const catKey = item.dataset.pinCat;
+  const index = parseInt(item.dataset.index, 10);
+
+  if (e.target.closest(".daily-check")) {
+    toggleChecked(name, catKey);
+  } else if (e.target.closest(".daily-move")) {
+    const dir = parseInt(e.target.closest(".daily-move").dataset.dir, 10);
+    movePin(index, dir);
+  } else if (e.target.closest(".daily-remove")) {
+    removePin(name, catKey);
+  }
+});
+
+document.getElementById("dailiesResetBtn").addEventListener("click", () => {
+  checkedMap = {};
+  saveChecked();
+  renderDailies();
+  schedulePush();
+});
+
+// Quick-add search: filters every entry across every category by name, and
+// skips anything already pinned so results only ever show things you can
+// actually add.
+const dailiesAddInput = document.getElementById("dailiesAddInput");
+const dailiesAddResults = document.getElementById("dailiesAddResults");
+
+dailiesAddInput.addEventListener("input", () => {
+  const term = dailiesAddInput.value.trim().toLowerCase();
+  if (!term) {
+    dailiesAddResults.classList.remove("open");
+    dailiesAddResults.innerHTML = "";
+    return;
+  }
+  const matches = getAllEntriesFlat()
+    .filter(({ entry }) => entry.name.toLowerCase().includes(term))
+    .filter(({ entry, categoryKey }) => !isPinned(entry.name, categoryKey))
+    .slice(0, 8);
+
+  dailiesAddResults.innerHTML = matches.length
+    ? matches.map(({ entry, categoryKey, categoryName }) => `
+        <button type="button" class="dailies-add-result" data-pin-name="${escapeAttr(entry.name)}" data-pin-cat="${escapeAttr(categoryKey)}">
+          <span>${entry.name}</span>
+          <span class="dailies-add-result-cat">${categoryName}</span>
+        </button>`).join("")
+    : `<div class="dailies-add-empty">No matches, or already pinned.</div>`;
+  dailiesAddResults.classList.add("open");
+});
+
+dailiesAddResults.addEventListener("click", (e) => {
+  const btn = e.target.closest(".dailies-add-result");
+  if (!btn) return;
+  togglePin(btn.dataset.pinName, btn.dataset.pinCat); // already re-renders the list
+  dailiesAddInput.value = "";
+  dailiesAddResults.classList.remove("open");
+  dailiesAddResults.innerHTML = "";
+});
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".dailies-add")) {
+    dailiesAddResults.classList.remove("open");
+  }
+});
 
 // ============================================================================
 // CONTACT FORM — submits to Formspree via fetch() so the visitor never
@@ -2248,13 +3228,31 @@ window.addEventListener("error", (e) => {
 // ============================================================================
 try {
   validateCategories();
+  loadPins();
+  loadChecked();
+  loadStreak();
+  loadSyncInfo();
+  maybeAutoResetDaily();
   renderReferences();
   renderRates();
   renderNotes();
   renderCategoryFilters();
   renderLandingStats();
   render();
+  syncPinUI();
   window.__ledgerInitialized = true; // seen by the watchdog script below
+
+  // Catches the 6pm ET reset moment for a tab left open across it, so the
+  // checklist clears itself live instead of needing a reload. A minute is
+  // frequent enough to feel immediate without doing real work most checks.
+  setInterval(() => {
+    if (maybeAutoResetDaily()) {
+      syncPinUI();
+      if (!document.getElementById("dailiesPage").classList.contains("hidden")) {
+        renderDailies();
+      }
+    }
+  }, 60000);
 } catch (err) {
   showFatalError(err);
   throw err; // still surface it in the console for debugging
