@@ -1384,7 +1384,7 @@
 
     <div class="dailies-sync">
       <div class="dailies-sync-label">Sync across devices</div>
-      <div class="dailies-sync-desc">Optional. Carries your pinned list to another device using a free JSON host, not an account — just a code only you have. Read the fine print before relying on it: <a href="#" id="syncInfoLink">how this works</a>.</div>
+      <div class="dailies-sync-desc">Optional. Carries your pinned list to another device using a small free database, not an account — just a code only you have. Read the fine print before relying on it: <a href="#" id="syncInfoLink">how this works</a>.</div>
 
       <button class="dailies-sync-create-btn" id="syncCreateBtn" type="button">Create a sync code</button>
 
@@ -1395,12 +1395,12 @@
       <button class="dailies-sync-disconnect-btn" id="syncDisconnectBtn" type="button" style="display:none;">Disconnect this device</button>
 
       <div class="dailies-sync-connect-row">
-        <input class="dailies-sync-connect-input" id="syncConnectInput" type="text" placeholder="Paste a code from another device…" autocomplete="off">
+        <input class="dailies-sync-connect-input" id="syncConnectInput" type="text" placeholder="Paste a code, e.g. AB3D-9KLM…" autocomplete="off">
         <button class="dailies-sync-connect-btn" id="syncConnectBtn" type="button">Connect</button>
       </div>
 
       <div class="dailies-sync-status" id="syncStatus"></div>
-      <div class="dailies-sync-fine-print" id="syncFinePrint" style="display:none;">Connecting replaces this device's pinned list with whatever the code's owner last saved. Sync runs in the background after that on both devices — if you change the same item on two devices within about a minute of each other, whichever saves last wins; there's no merging. This relies on a small third-party JSON host, not a service run by this site — if it's ever down or discontinued, sync just quietly stops working and everything above keeps working locally as normal.</div>
+      <div class="dailies-sync-fine-print" id="syncFinePrint" style="display:none;">Connecting replaces this device's pinned list with whatever the code's owner last saved. Sync runs in the background after that on both devices — if you change the same item on two devices within about a minute of each other, whichever saves last wins; there's no merging. This relies on a small database this site runs separately from the main GitHub Pages site — if it's ever down, sync just quietly stops working and everything above keeps working locally as normal. Anyone who has your code can read and overwrite that list, so treat it like a shared password, not a public label.</div>
     </div>
 
     <button class="notes-page-back" id="dailiesBackBtn">← Back to the Ledger</button>
@@ -2850,48 +2850,54 @@ function renderStreak() {
 
 // ============================================================================
 // CROSS-DEVICE SYNC — optional, off by default. There's no backend here
-// (this is a static file on GitHub Pages), so this leans on jsonhosting.com,
-// a free anonymous JSON-storage API, purely as a bridge between a person's
-// own devices. It is NOT treated as durable storage: localStorage on each
-// device stays the source of truth, and if the third-party service is ever
-// unreachable, everything above still works exactly as before — sync just
-// silently fails to push/pull that round.
+// (this is a static file on GitHub Pages), so this uses a free Firebase
+// Realtime Database as a bridge between a person's own devices — nothing
+// else on the site touches Firebase. It is NOT treated as durable storage:
+// localStorage on each device stays the source of truth, and if Firebase is
+// ever unreachable, everything above still works exactly as before — sync
+// just silently fails to push/pull that round.
 //
-// The "sync code" a person copies between devices is just
-// base64(JSON.stringify({id, editKey})) — the id points at their record,
-// the editKey is what lets a device holding the code write to it (so
-// having the code is equivalent to having write access, same as a
-// password). Reads are public on this service, so treat the code with the
-// same care as a shareable link, not a secret login.
+// Security works entirely through the database's own rules (see the repo's
+// setup notes), which only open read/write under the "syncs/<code>" path —
+// everything else stays locked. The code itself is what grants access, so
+// treat it like a shareable password, not a public label: anyone who has it
+// can read AND overwrite that record.
 // ============================================================================
-const SYNC_API = "https://jsonhosting.com/api/json";
-const SYNC_INFO_KEY = "coinLedgerSyncInfo"; // { id, editKey } | absent
+const FIREBASE_DB_URL = "https://coin-ledger-c31d8-default-rtdb.firebaseio.com";
+const SYNC_CODE_KEY = "coinLedgerSyncCode";
 
-let syncInfo = null;
+// Ambiguous characters (0/O, 1/I/L) left out so a hand-copied code doesn't
+// get misread. Grouped as XXXX-XXXX purely for readability.
+const SYNC_CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+
+let syncCode = null;
 let syncPushTimer = null;
 
 function loadSyncInfo() {
-  try {
-    const raw = localStorage.getItem(SYNC_INFO_KEY);
-    syncInfo = raw ? JSON.parse(raw) : null;
-  } catch (e) { syncInfo = null; }
+  try { syncCode = localStorage.getItem(SYNC_CODE_KEY) || null; } catch (e) { syncCode = null; }
 }
 function saveSyncInfo() {
   try {
-    if (syncInfo) localStorage.setItem(SYNC_INFO_KEY, JSON.stringify(syncInfo));
-    else localStorage.removeItem(SYNC_INFO_KEY);
+    if (syncCode) localStorage.setItem(SYNC_CODE_KEY, syncCode);
+    else localStorage.removeItem(SYNC_CODE_KEY);
   } catch (e) {}
 }
 
-function encodeSyncCode(info) {
-  try { return btoa(JSON.stringify(info)); } catch (e) { return ""; }
+function generateSyncCode() {
+  let out = "";
+  for (let i = 0; i < 8; i++) {
+    if (i === 4) out += "-";
+    out += SYNC_CODE_ALPHABET[Math.floor(Math.random() * SYNC_CODE_ALPHABET.length)];
+  }
+  return out;
 }
-function decodeSyncCode(code) {
-  try {
-    const info = JSON.parse(atob(code.trim()));
-    if (info && typeof info.id === "string" && typeof info.editKey === "string") return info;
-  } catch (e) {}
-  return null;
+
+// Firebase path segments can't contain ".", "#", "$", "[", "]", "/" — strip
+// anything outside our own generated alphabet so a pasted code can never
+// produce an invalid or unintended path.
+function sanitizeSyncCode(raw) {
+  const cleaned = raw.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
+  return cleaned || null;
 }
 
 function buildSyncPayload() {
@@ -2910,85 +2916,89 @@ function applySyncPayload(data) {
   syncPinUI();
 }
 
-function setSyncStatus(state) {
+// detail carries the actual HTTP status or error type, shown in parentheses
+// so a repeat failure is diagnosable at a glance instead of just "it broke."
+function setSyncStatus(state, detail) {
   const el = document.getElementById("syncStatus");
   if (!el) return;
   const messages = {
     working: "Syncing…",
     synced: "Synced just now.",
-    error: "Couldn't reach the sync server — your changes are still saved on this device.",
-    badcode: "That code doesn't look right — double check you copied the whole thing.",
+    error: "Couldn't reach the sync server — your changes are still saved on this device." + (detail ? ` (${detail})` : ""),
+    badcode: "Enter a code first.",
+    notfound: "No sync data found for that code — check it was typed correctly.",
   };
   el.textContent = messages[state] || "";
-  el.classList.toggle("sync-status-error", state === "error" || state === "badcode");
+  el.classList.toggle("sync-status-error", state === "error" || state === "badcode" || state === "notfound");
 }
 
 // Waits a beat after the last change before pushing, so a burst of clicks
 // (checking off several dailies in a row) sends one request instead of one
 // per click. No-ops entirely if this device hasn't set up sync.
 function schedulePush() {
-  if (!syncInfo) return;
+  if (!syncCode) return;
   clearTimeout(syncPushTimer);
   syncPushTimer = setTimeout(pushSync, 1200);
 }
 
 async function pushSync() {
-  if (!syncInfo) return;
+  if (!syncCode) return;
   try {
-    const res = await fetch(`${SYNC_API}/${syncInfo.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-Edit-Key": syncInfo.editKey },
+    const res = await fetch(`${FIREBASE_DB_URL}/syncs/${syncCode}.json`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(buildSyncPayload()),
     });
-    setSyncStatus(res.ok ? "synced" : "error");
+    setSyncStatus(res.ok ? "synced" : "error", res.ok ? null : `status ${res.status}`);
   } catch (e) {
-    setSyncStatus("error");
+    setSyncStatus("error", "network");
   }
 }
 
 async function createSyncCode() {
+  const code = generateSyncCode();
   setSyncStatus("working");
   try {
-    const res = await fetch(SYNC_API, {
-      method: "POST",
+    const res = await fetch(`${FIREBASE_DB_URL}/syncs/${code}.json`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(buildSyncPayload()),
     });
-    const data = await res.json();
-    if (!res.ok || !data.id || !data.editKey) throw new Error("bad response");
-    syncInfo = { id: data.id, editKey: data.editKey };
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    syncCode = code;
     saveSyncInfo();
     renderSyncUI();
     setSyncStatus("synced");
   } catch (e) {
-    setSyncStatus("error");
+    setSyncStatus("error", e.message);
   }
 }
 
 // Joins whatever code came from another device: pulls that record down
 // (overwriting this device's local pins/checked/streak — the other
-// device's saved state wins on first connect) and adopts its id+editKey
-// so this device can push future changes to the same record too.
-async function connectSyncCode(code) {
-  const decoded = decodeSyncCode(code);
-  if (!decoded) { setSyncStatus("badcode"); return; }
+// device's saved state wins on first connect) and adopts the code so this
+// device can push future changes to the same record too.
+async function connectSyncCode(rawCode) {
+  const code = sanitizeSyncCode(rawCode);
+  if (!code) { setSyncStatus("badcode"); return; }
   setSyncStatus("working");
   try {
-    const res = await fetch(`${SYNC_API}/${decoded.id}`);
-    if (!res.ok) throw new Error("not found");
+    const res = await fetch(`${FIREBASE_DB_URL}/syncs/${code}.json`);
+    if (!res.ok) throw new Error(`status ${res.status}`);
     const data = await res.json();
-    syncInfo = decoded;
+    if (data === null) { setSyncStatus("notfound"); return; }
+    syncCode = code;
     saveSyncInfo();
     applySyncPayload(data);
     renderSyncUI();
     setSyncStatus("synced");
   } catch (e) {
-    setSyncStatus("error");
+    setSyncStatus("error", e.message);
   }
 }
 
 function disconnectSync() {
-  syncInfo = null;
+  syncCode = null;
   saveSyncInfo();
   renderSyncUI();
   setSyncStatus("");
@@ -3000,8 +3010,8 @@ function renderSyncUI() {
   const codeBox = document.getElementById("syncCodeBox");
   const disconnectBtn = document.getElementById("syncDisconnectBtn");
   if (!createBtn) return;
-  if (syncInfo) {
-    codeBox.value = encodeSyncCode(syncInfo);
+  if (syncCode) {
+    codeBox.value = syncCode;
     codeRow.style.display = "";
     createBtn.style.display = "none";
     disconnectBtn.style.display = "";
