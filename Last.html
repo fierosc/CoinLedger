@@ -347,6 +347,18 @@
     color: var(--text-faint);
   }
 
+  .all-categories-summary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .all-categories-summary strong {
+    font-weight: 500;
+    color: var(--gold-bright);
+  }
+
   /* Card-grid layout — used below the DESKTOP TABLE LAYOUT breakpoint
      further down this file (currently 880px). Below that width, each
      entry is its own bordered, rounded box, flowing into as many columns
@@ -638,9 +650,28 @@
     .topbar-actions {
       position: static;
       justify-content: flex-start;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      gap: 5px;
       margin-bottom: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .topbar-actions::-webkit-scrollbar { display: none; }
+    /* Shrunk down from the desktop size so all four buttons fit on one
+       row instead of wrapping to a second line — keeps the topbar from
+       eating an extra line of vertical space on small screens. */
+    .ref-btn, .rates-btn, .notes-btn, .dailies-btn {
+      font-size: 10px;
+      padding: 5px 8px;
+      flex-shrink: 0;
+    }
+    .ref-btn .btn-icon, .rates-btn .btn-icon, .notes-btn .btn-icon, .dailies-btn .btn-icon {
+      width: 11px;
+      height: 11px;
+      margin-right: 3px;
+    }
+    .dailies-count { font-size: 8.5px; padding: 0 4px; margin-left: 3px; }
     .ref-panel { top: 80px; }
   }
 
@@ -868,25 +899,63 @@
     background: var(--panel);
     border: 1px solid var(--rule);
     border-radius: 10px;
-    padding: 16px 18px;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
   }
+  .note-item.expanded { border-color: var(--gold); }
+  .note-item-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 16px 18px;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .note-item-header:hover .note-item-title { color: var(--gold-bright); }
+  .note-item-header:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
   .note-item-title {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     letter-spacing: 0.04em;
     color: var(--gold-bright);
-    margin-bottom: 8px;
+    transition: color 0.15s ease;
   }
+  .note-item-chevron {
+    width: 15px;
+    height: 15px;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s ease;
+  }
+  .note-item-header:hover .note-item-chevron { color: var(--gold-bright); }
+  .note-item.expanded .note-item-chevron { transform: rotate(180deg); color: var(--gold-bright); }
+  .note-item-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .note-item.expanded .note-item-collapse { grid-template-rows: 1fr; }
+  .note-item-collapse-inner { overflow: hidden; }
   .note-item-body {
     font-size: 13.5px;
     color: var(--text-dim);
     line-height: 1.6;
+    padding: 0 18px 18px;
   }
 
   .note-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px 20px;
+    padding: 0 18px 18px;
   }
   .note-stat-label {
     font-family: 'IBM Plex Mono', monospace;
@@ -1001,6 +1070,126 @@
   @media (max-width: 700px) {
     .dailies-purpose { font-size: 12.5px; line-height: 1.5; }
   }
+
+  .dailies-top { display: flex; flex-direction: column; }
+  .dailies-top .profile-switcher { order: 1; }
+  .dailies-top .profile-form { order: 2; }
+  .dailies-top .dailies-streak { order: 3; align-self: center; }
+  @media (max-width: 700px) {
+    .dailies-top .dailies-streak { order: 0; }
+  }
+
+  .profile-switcher { position: relative; }
+  .profile-pills .chip.copy-checklist-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-faint);
+  }
+  .profile-pills .chip.copy-checklist-pill:hover { border-color: var(--gold); color: var(--gold-bright); }
+  .profile-pills .chip.copy-checklist-pill.active { border-color: var(--gold); color: var(--gold-bright); background: rgba(200,155,74,0.12); }
+
+  .copy-checklist-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 240px;
+    max-width: calc(100vw - 40px);
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 20;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .copy-checklist-panel.open { display: block; }
+  .copy-checklist-panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    padding: 2px 6px 8px;
+  }
+  .copy-checklist-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .copy-checklist-option:hover { background: rgba(200,155,74,0.12); color: var(--gold-bright); }
+  .copy-checklist-option-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    flex-shrink: 0;
+  }
+  .copy-checklist-empty {
+    font-size: 12.5px;
+    color: var(--text-faint);
+    padding: 6px 8px;
+  }
+
+  .profile-pills { margin-bottom: 10px; }
+  .profile-form {
+    text-align: left;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .profile-form-input {
+    width: 100%;
+    background: var(--bg-alt);
+    border: 1px solid var(--rule);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+  }
+  .profile-form-input::placeholder { color: var(--text-faint); }
+  .profile-form-input:focus { outline: none; border-color: var(--gold); }
+  .profile-form-actions { display: flex; align-items: center; gap: 14px; margin-top: 2px; flex-wrap: wrap; }
+  .profile-form-save-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-bright);
+    cursor: pointer;
+  }
+  .profile-form-save-btn:hover { background: var(--gold); color: #14161F; }
+  .profile-form-cancel-btn, .profile-form-delete-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+  .profile-form-cancel-btn:hover { color: var(--text-dim); }
+  .profile-form-delete-btn:hover { color: var(--bronze); }
 
   .dailies-streak {
     display: inline-flex;
@@ -1194,6 +1383,16 @@
   }
   .dailies-sync-desc a { color: var(--text-dim); text-decoration: underline; }
   .dailies-sync-desc a:hover { color: var(--gold-bright); }
+  .dailies-sync-info-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: var(--text-dim);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .dailies-sync-info-btn:hover { color: var(--gold-bright); }
 
   .dailies-sync-create-btn, .dailies-sync-copy-btn, .dailies-sync-connect-btn {
     font-family: 'IBM Plex Mono', monospace;
@@ -1366,7 +1565,23 @@
     <div class="notes-page-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/></svg></div>
     <h2 class="notes-page-title">Dailies</h2>
     <div class="notes-page-sub">EVOLVED PWI</div>
-    <div class="dailies-streak" id="dailiesStreak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg><span id="dailiesStreakNum">0</span> day streak</div>
+
+    <div class="dailies-top" id="dailiesTop">
+      <div class="profile-switcher">
+        <div class="filter-row profile-pills" id="profilePills"></div>
+        <div class="copy-checklist-panel" id="copyChecklistPanel"></div>
+      </div>
+      <div class="profile-form" id="profileForm" style="display:none;">
+        <input class="profile-form-input" id="profileNameInput" type="text" placeholder="Character name" autocomplete="off" maxlength="40">
+        <div class="profile-form-actions">
+          <button class="profile-form-save-btn" id="profileFormSaveBtn" type="button">Save</button>
+          <button class="profile-form-cancel-btn" id="profileFormCancelBtn" type="button">Cancel</button>
+          <button class="profile-form-delete-btn" id="profileFormDeleteBtn" type="button" style="display:none;">Delete this character</button>
+        </div>
+      </div>
+
+      <div class="dailies-streak" id="dailiesStreak"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg><span id="dailiesStreakNum">0</span> day streak</div>
+    </div>
     <div class="dailies-purpose">The Ledger covers (almost) every way to make coin, but you're not running all of it every day. Pin whatever you actually do: dungeons, dailies, farms, whatever. Arrange it in order and knock it out like a checklist.</div>
     <div class="rates-page-note">Tap the pin icon on any method in the Ledger (or search below) to pin it here. Reorder with the arrows and check items off as you finish them — the list lives only on this device and unchecks itself automatically at 20:00 server time, same as the actual server reset.</div>
 
@@ -1384,7 +1599,7 @@
 
     <div class="dailies-sync">
       <div class="dailies-sync-label">Sync across devices</div>
-      <div class="dailies-sync-desc">Optional. Carries your pinned list to another device using a small free database, not an account — just a code only you have. Read the fine print before relying on it: <a href="#" id="syncInfoLink">how this works</a>.</div>
+      <div class="dailies-sync-desc">Optional. Carries your pinned list to another device using a small free database, not an account — just a code only you have. Read the fine print before relying on it: <button type="button" class="dailies-sync-info-btn" id="syncInfoLink">how this works</button>.</div>
 
       <button class="dailies-sync-create-btn" id="syncCreateBtn" type="button">Create a sync code</button>
 
@@ -1716,6 +1931,17 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   UNDISCOVERED_DUNGEON_ENTRY,
   WARSONG_CITY_ENTRY,
   ENDLESS_UNIVERSE_ENTRY,
+  {
+    name: "Nirvana Palace",
+    stages: ["M"],
+    level: "100+",
+    reward: "Bosses drop 3-7x Iceshard Coins (random) plus Rapture Crystal and Uncanny Crystal drops",
+    egValue: null, // pure item/mat drops, no EG figure attached
+    freq: "Unlimited entries; 1x Nirvana Palace Key required per run",
+    notes: "3-player minimum on x2. North of City of Raging Tides; keys cost 3M Coin from the Mysterious Old Man.",
+    link: "https://pwi.evolvedpw.com/database/article/nirvana-palace",
+    link2: "https://pwi.fandom.com/wiki/Palace_of_Nirvana",
+  },
 ];
 // ---- end DUNGEONS_INSTANCES_ENTRIES ----
 
@@ -2021,18 +2247,22 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mqpzojel";
 const NOTES = [
   {
     title: "How this site is built",
-    body: "The Coin Ledger is a single hand-edited HTML file: no framework, no database. Every entry lives in a plain JS array inside this page, and a small script renders it into rows and cards on load. Publishing runs through GitHub Pages: a GitHub Action opens the page in a headless browser, lets it render once, and saves that as the live file, so the wiki's content is readable even before JavaScript runs, which helps both search engines and slower devices.",
+    body: "The Coin Ledger is a single hand-edited HTML file: no framework. Every wiki entry lives in a plain JS array inside this page, and a small script renders it into rows and cards on load. The Dailies tracker (character profiles, pinned methods, streaks) is built the same way: plain JavaScript reading and writing to your browser's localStorage, no framework there either, so your list stays on your device by default. Optional cross-device sync uses a small free Firebase database purely to carry that data between devices with a code; it's not the source of truth and nothing else on the site touches it. Publishing runs through GitHub Pages: a GitHub Action opens the page in a headless browser, lets it render once, and saves that as the live file, so the wiki's content is readable even before JavaScript runs, which helps both search engines and slower devices.",
   },
   {
     title: "About Evolved PWI",
+    defaultOpen: true,
     stats: [
       { label: "Rates", value: "2x drops, EXP, spirit, coins, quest EXP/spirit" },
-      { label: "Classes", value: "16" },
-      { label: "Races", value: "6" },
+      { label: "Classes / Races", value: "16 / 6" },
       { label: "Gear cap", value: "R9R4 or R8RR" },
       { label: "Removed", value: "Starchart items, Avatar Cards, G17 Weapons" },
       { label: "Launched", value: "July 11, 2020" },
     ],
+  },
+  {
+    title: "A note on AI",
+    body: "AI was used to help write and edit the code for this site. The game data itself (drop rates, locations, rewards) is compiled and checked by hand from in-game sources and community references like pwdatabase, not generated by AI. The code is AI-assisted; the data isn't.",
   },
 ];
 
@@ -2111,22 +2341,44 @@ let activeSort = "default";
 let searchTerm = "";
 
 // ============================================================================
-// DAILIES / PINS — saved client-side (localStorage), so the pinned list and
-// checked-off state persist on this device across visits without any
-// server or account. If localStorage is unavailable (private browsing,
-// storage disabled, etc.) everything below falls back to an in-memory
-// array/object so the feature still works for the current page load.
+// DAILIES / PINS / PROFILES — saved client-side (localStorage), so pinned
+// lists, checked-off state, and streaks persist on this device across
+// visits without any server or account. If localStorage is unavailable
+// (private browsing, storage disabled, etc.) everything below falls back to
+// an in-memory array/object so the feature still works for the page load.
+//
+// Each character gets its own profile: { id, name, class, pins, checkedMap,
+// streak }. `pins` / `checkedMap` / `streak` below are always the CURRENTLY
+// ACTIVE profile's working copy — every existing function that reads or
+// writes them (togglePin, renderDailies, maybeAutoResetDaily, sync, etc.)
+// keeps working completely unchanged, because loadPins/savePins/etc. are
+// the only things that changed: they now read from and write into whichever
+// profile is active, instead of one flat pair of localStorage keys.
 // ============================================================================
-const PINS_KEY = "coinLedgerPins";       // ordered array of {name, categoryKey}
-const CHECKED_KEY = "coinLedgerChecked"; // { "name||categoryKey": true }
-const RESET_KEY = "coinLedgerLastReset"; // "YYYY-MM-DD" of last auto-uncheck
-const STREAK_KEY = "coinLedgerStreak";   // integer, consecutive fully-completed days
+const PROFILES_KEY = "coinLedgerProfiles";           // [{id, name, class, pins, checkedMap, streak}]
+const ACTIVE_PROFILE_KEY = "coinLedgerActiveProfile"; // id of the active profile
+const RESET_KEY = "coinLedgerLastReset";              // "YYYY-MM-DD" of last auto-uncheck, shared across all profiles
+
+// Pre-profiles localStorage keys — read once by migrateToProfilesIfNeeded()
+// below to fold anyone's existing pinned list into a first "Main" profile,
+// then never written to again.
+const LEGACY_PINS_KEY = "coinLedgerPins";
+const LEGACY_CHECKED_KEY = "coinLedgerChecked";
+const LEGACY_STREAK_KEY = "coinLedgerStreak";
+
+let profiles = [];
+let activeProfileId = null;
+let editingProfileId = null; // null while the add/edit form is closed or adding new
 
 let pins = [];
 let checkedMap = {};
 let streak = 0;
 
 function pinKey(name, categoryKey) { return name + "||" + categoryKey; }
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 // Small thumbtack icon (Material Design "push_pin" glyph) used for the
 // per-row/per-card pin toggle — an SVG so its color can follow currentColor
@@ -2138,39 +2390,173 @@ const PIN_ICON_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="
 // badge — same currentColor treatment as the pin icon above.
 const FLAME_ICON_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>';
 
-function loadPins() {
+function generateProfileId() {
+  return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function getActiveProfile() {
+  return profiles.find(p => p.id === activeProfileId) || null;
+}
+
+function loadProfiles() {
   try {
-    const raw = localStorage.getItem(PINS_KEY);
-    pins = raw ? JSON.parse(raw) : [];
-  } catch (e) { pins = []; }
+    const raw = localStorage.getItem(PROFILES_KEY);
+    profiles = raw ? JSON.parse(raw) : [];
+  } catch (e) { profiles = []; }
+}
+function saveProfiles() {
+  try { localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles)); } catch (e) {}
+}
+function loadActiveProfileId() {
+  try { activeProfileId = localStorage.getItem(ACTIVE_PROFILE_KEY) || null; } catch (e) { activeProfileId = null; }
+}
+function saveActiveProfileId() {
+  try {
+    if (activeProfileId) localStorage.setItem(ACTIVE_PROFILE_KEY, activeProfileId);
+    else localStorage.removeItem(ACTIVE_PROFILE_KEY);
+  } catch (e) {}
+}
+
+// Runs once, before anything else touches `profiles`. If profiles already
+// exist, this just makes sure activeProfileId actually points at one of
+// them. Otherwise it wraps any pre-existing (pre-profiles) pinned list into
+// a first "Main" profile so nobody's list disappears on this update, or —
+// for a brand new visitor with nothing saved at all — creates one empty
+// "Main" profile so the rest of the code never has to handle zero profiles.
+function migrateToProfilesIfNeeded() {
+  if (profiles.length > 0) {
+    if (!profiles.some(p => p.id === activeProfileId)) {
+      activeProfileId = profiles[0].id;
+      saveActiveProfileId();
+    }
+    return;
+  }
+  let legacyPins = [];
+  let legacyChecked = {};
+  let legacyStreak = 0;
+  let hadLegacyData = false;
+  try {
+    const raw = localStorage.getItem(LEGACY_PINS_KEY);
+    if (raw) { legacyPins = JSON.parse(raw); hadLegacyData = true; }
+  } catch (e) {}
+  try {
+    const raw = localStorage.getItem(LEGACY_CHECKED_KEY);
+    if (raw) legacyChecked = JSON.parse(raw);
+  } catch (e) {}
+  try {
+    const raw = localStorage.getItem(LEGACY_STREAK_KEY);
+    if (raw) legacyStreak = parseInt(raw, 10) || 0;
+  } catch (e) {}
+
+  const profile = {
+    id: generateProfileId(),
+    name: "Main",
+    pins: Array.isArray(legacyPins) ? legacyPins : [],
+    checkedMap: (legacyChecked && typeof legacyChecked === "object") ? legacyChecked : {},
+    streak: legacyStreak,
+  };
+  profiles = [profile];
+  activeProfileId = profile.id;
+  saveProfiles();
+  saveActiveProfileId();
+
+  if (hadLegacyData) {
+    try {
+      localStorage.removeItem(LEGACY_PINS_KEY);
+      localStorage.removeItem(LEGACY_CHECKED_KEY);
+      localStorage.removeItem(LEGACY_STREAK_KEY);
+    } catch (e) {}
+  }
+}
+
+function switchProfile(id) {
+  if (!profiles.some(p => p.id === id)) return;
+  activeProfileId = id;
+  saveActiveProfileId();
+  loadPins();
+  loadChecked();
+  loadStreak();
+  renderDailies();
+  renderProfiles();
+}
+
+function addProfile(name) {
+  const trimmedName = name.trim();
+  if (!trimmedName) return;
+  const profile = {
+    id: generateProfileId(),
+    name: trimmedName,
+    pins: [],
+    checkedMap: {},
+    streak: 0,
+  };
+  profiles.push(profile);
+  saveProfiles();
+  switchProfile(profile.id);
+  schedulePush();
+}
+
+function updateProfile(id, name) {
+  const p = profiles.find(pr => pr.id === id);
+  if (!p) return;
+  const trimmedName = name.trim();
+  if (trimmedName) p.name = trimmedName;
+  saveProfiles();
+  renderProfiles();
+  schedulePush();
+}
+
+// Always keeps at least one profile — the last remaining one can't be
+// deleted, since every function above assumes an active profile exists.
+function deleteProfile(id) {
+  if (profiles.length <= 1) return;
+  profiles = profiles.filter(p => p.id !== id);
+  saveProfiles();
+  if (activeProfileId === id) {
+    switchProfile(profiles[0].id);
+  } else {
+    renderProfiles();
+  }
+  schedulePush();
+}
+
+function loadPins() {
+  const p = getActiveProfile();
+  pins = p && Array.isArray(p.pins) ? p.pins : [];
 }
 function savePins() {
-  try { localStorage.setItem(PINS_KEY, JSON.stringify(pins)); } catch (e) {}
+  const p = getActiveProfile();
+  if (p) { p.pins = pins; saveProfiles(); }
 }
 function loadChecked() {
-  try {
-    const raw = localStorage.getItem(CHECKED_KEY);
-    checkedMap = raw ? JSON.parse(raw) : {};
-  } catch (e) { checkedMap = {}; }
+  const p = getActiveProfile();
+  checkedMap = p && p.checkedMap && typeof p.checkedMap === "object" ? p.checkedMap : {};
 }
 function saveChecked() {
-  try { localStorage.setItem(CHECKED_KEY, JSON.stringify(checkedMap)); } catch (e) {}
+  const p = getActiveProfile();
+  if (p) { p.checkedMap = checkedMap; saveProfiles(); }
 }
 function loadStreak() {
-  try {
-    const raw = localStorage.getItem(STREAK_KEY);
-    streak = raw ? (parseInt(raw, 10) || 0) : 0;
-  } catch (e) { streak = 0; }
+  const p = getActiveProfile();
+  streak = p && typeof p.streak === "number" ? p.streak : 0;
 }
 function saveStreak() {
-  try { localStorage.setItem(STREAK_KEY, String(streak)); } catch (e) {}
+  const p = getActiveProfile();
+  if (p) { p.streak = streak; saveProfiles(); }
+}
+
+// Shared by pinsCompleteNow() below (checked against the live active
+// profile) and the reset loop in maybeAutoResetDaily() (checked against
+// every profile in turn, active or not).
+function profileIsComplete(p) {
+  return !!(p.pins && p.pins.length > 0 && p.pins.every(pin => p.checkedMap && p.checkedMap[pinKey(pin.name, pin.categoryKey)]));
 }
 
 // True when every currently pinned item is checked off — used both to
 // decide whether today "counts" at the next reset, and to show the +1 the
 // streak badge previews live, before that reset actually banks it.
 function pinsCompleteNow() {
-  return pins.length > 0 && pins.every(p => checkedMap[pinKey(p.name, p.categoryKey)]);
+  return profileIsComplete({ pins, checkedMap });
 }
 
 function isPinned(name, categoryKey) {
@@ -2274,16 +2660,21 @@ function maybeAutoResetDaily() {
   let lastReset = null;
   try { lastReset = localStorage.getItem(RESET_KEY); } catch (e) {}
   if (lastReset !== bucket) {
-    // Bank (or break) the streak for the day that's ending, using
-    // whatever was pinned/checked right up until this moment — before any
-    // of it gets wiped below. An empty pin list doesn't count either way;
+    // Bank (or break) every profile's streak for the day that's ending,
+    // using whatever was pinned/checked right up until this moment on
+    // EACH profile — not just whichever one happens to be active — before
+    // any of it gets wiped. An empty pin list doesn't count either way;
     // nothing was there to complete, so it shouldn't cost a streak either.
-    if (pins.length > 0) {
-      streak = pinsCompleteNow() ? streak + 1 : 0;
-      saveStreak();
-    }
-    checkedMap = {};
-    saveChecked();
+    profiles.forEach(p => {
+      if (p.pins && p.pins.length > 0) {
+        p.streak = profileIsComplete(p) ? (p.streak || 0) + 1 : 0;
+      }
+      p.checkedMap = {};
+    });
+    saveProfiles();
+    loadPins();
+    loadChecked();
+    loadStreak();
     try { localStorage.setItem(RESET_KEY, bucket); } catch (e) {}
     schedulePush();
     return true;
@@ -2553,6 +2944,8 @@ function render() {
 
   if (totalShown === 0 && CATEGORIES.some(c => c.entries.length > 0)) {
     html = `<div class="no-results">No methods match your filters.</div>`;
+  } else if (activeCategory === "all") {
+    html = `<div class="all-categories-summary">All Categories · <strong>${totalShown}</strong> method${totalShown === 1 ? "" : "s"}</div>` + html;
   }
 
   content.innerHTML = html;
@@ -2758,20 +3151,35 @@ document.getElementById("ratesBackBtn").addEventListener("click", hideRatesPage)
 function renderNotes() {
   const list = document.getElementById("notesPageList");
   if (!list) return;
-  list.innerHTML = NOTES.map(n => `
-    <div class="note-item">
-      <div class="note-item-title">${n.title}</div>
-      ${n.stats ? `
-      <div class="note-stats">
-        ${n.stats.map(s => `
-        <div>
-          <div class="note-stat-label">${s.label}</div>
-          <div class="note-stat-value">${s.value}</div>
-        </div>`).join("")}
-      </div>` : `
-      <div class="note-item-body">${n.body}</div>`}
+  list.innerHTML = NOTES.map((n, i) => `
+    <div class="note-item${n.defaultOpen ? " expanded" : ""}" id="note-${i}">
+      <button class="note-item-header" type="button" aria-expanded="${n.defaultOpen ? "true" : "false"}" aria-controls="note-${i}-panel" data-note-index="${i}">
+        <span class="note-item-title">${n.title}</span>
+        <svg class="note-item-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="note-item-collapse" id="note-${i}-panel">
+        <div class="note-item-collapse-inner">
+          ${n.stats ? `
+          <div class="note-stats">
+            ${n.stats.map(s => `
+            <div>
+              <div class="note-stat-label">${s.label}</div>
+              <div class="note-stat-value">${s.value}</div>
+            </div>`).join("")}
+          </div>` : `
+          <div class="note-item-body">${n.body}</div>`}
+        </div>
+      </div>
     </div>`).join("");
 }
+
+document.getElementById("notesPageList").addEventListener("click", (e) => {
+  const header = e.target.closest(".note-item-header");
+  if (!header) return;
+  const item = header.closest(".note-item");
+  const expanded = item.classList.toggle("expanded");
+  header.setAttribute("aria-expanded", expanded ? "true" : "false");
+});
 
 function showNotesPage() {
   document.getElementById("appShell").classList.add("hidden");
@@ -2901,18 +3309,35 @@ function sanitizeSyncCode(raw) {
 }
 
 function buildSyncPayload() {
-  return { pins, checkedMap, streak };
+  return { profiles, activeProfileId };
 }
 
 function applySyncPayload(data) {
   if (!data || typeof data !== "object") return;
-  pins = Array.isArray(data.pins) ? data.pins : [];
-  checkedMap = (data.checkedMap && typeof data.checkedMap === "object") ? data.checkedMap : {};
-  streak = typeof data.streak === "number" ? data.streak : 0;
-  savePins();
-  saveChecked();
-  saveStreak();
+  if (Array.isArray(data.profiles) && data.profiles.length > 0) {
+    profiles = data.profiles;
+    activeProfileId = data.profiles.some(p => p.id === data.activeProfileId) ? data.activeProfileId : data.profiles[0].id;
+  } else if (Array.isArray(data.pins)) {
+    // Older sync code from before character profiles existed — wrap it
+    // into one "Main" profile instead of just doing nothing with it.
+    profiles = [{
+      id: generateProfileId(),
+      name: "Main",
+      pins: data.pins,
+      checkedMap: (data.checkedMap && typeof data.checkedMap === "object") ? data.checkedMap : {},
+      streak: typeof data.streak === "number" ? data.streak : 0,
+    }];
+    activeProfileId = profiles[0].id;
+  } else {
+    return;
+  }
+  saveProfiles();
+  saveActiveProfileId();
+  loadPins();
+  loadChecked();
+  loadStreak();
   renderDailies();
+  renderProfiles();
   syncPinUI();
 }
 
@@ -3036,10 +3461,134 @@ document.getElementById("syncConnectBtn").addEventListener("click", () => {
   connectSyncCode(code);
   input.value = "";
 });
-document.getElementById("syncInfoLink").addEventListener("click", (e) => {
-  e.preventDefault();
+document.getElementById("syncInfoLink").addEventListener("click", () => {
   const el = document.getElementById("syncFinePrint");
   el.style.display = el.style.display === "none" ? "" : "none";
+});
+
+// ============================================================================
+// PROFILES UI — the character switcher + add/edit form at the top of the
+// Dailies page. All the actual data logic (add/update/delete/switch) lives
+// with the rest of the profile functions further up; this section is just
+// rendering the pill row and wiring the form.
+// ============================================================================
+function renderProfiles() {
+  const container = document.getElementById("profilePills");
+  if (!container) return;
+  container.innerHTML = profiles.map(p => {
+    const active = p.id === activeProfileId;
+    return `<button class="chip profile-pill-btn${active ? " active" : ""}" type="button" data-id="${escapeAttr(p.id)}">${escapeHtml(p.name)}</button>`;
+  }).join("")
+    + `<button class="chip" type="button" id="profileAddPill">+ Add character</button>`
+    + (profiles.length > 1 ? `<button class="chip copy-checklist-pill" type="button" id="copyChecklistPill">⧉ Copy checklist</button>` : "");
+  renderCopyChecklistPanel();
+}
+
+function renderCopyChecklistPanel() {
+  const panel = document.getElementById("copyChecklistPanel");
+  if (!panel) return;
+  const others = profiles.filter(p => p.id !== activeProfileId);
+  if (others.length === 0) {
+    panel.innerHTML = `<div class="copy-checklist-panel-title">Copy checklist from…</div><div class="copy-checklist-empty">No other characters yet.</div>`;
+    return;
+  }
+  panel.innerHTML = `<div class="copy-checklist-panel-title">Copy checklist from…</div>` + others.map(p => `
+    <button class="copy-checklist-option" type="button" data-id="${escapeAttr(p.id)}">
+      <span>${escapeHtml(p.name)}</span>
+      <span class="copy-checklist-option-count">${(p.pins || []).length} pinned</span>
+    </button>`).join("");
+}
+
+function closeCopyChecklistPanel() {
+  document.getElementById("copyChecklistPanel").classList.remove("open");
+  document.getElementById("copyChecklistPill")?.classList.remove("active");
+}
+
+// Copies another character's pinned list (and its order) onto the active
+// character, replacing whatever was pinned before. Deliberately leaves
+// checkedMap and streak untouched — those are daily-progress state, not
+// part of the list itself, and copying "done" checkmarks onto a character
+// that hasn't actually done them would be misleading.
+function copyChecklistFrom(sourceId) {
+  const source = profiles.find(p => p.id === sourceId);
+  const active = getActiveProfile();
+  if (!source || !active) return;
+  pins = Array.isArray(source.pins) ? source.pins.slice() : [];
+  savePins();
+  renderDailies();
+  closeCopyChecklistPanel();
+  schedulePush();
+}
+
+function openProfileForm(id) {
+  editingProfileId = id;
+  const form = document.getElementById("profileForm");
+  const nameInput = document.getElementById("profileNameInput");
+  const deleteBtn = document.getElementById("profileFormDeleteBtn");
+  if (id) {
+    const p = profiles.find(pr => pr.id === id);
+    nameInput.value = p ? p.name : "";
+    deleteBtn.style.display = profiles.length > 1 ? "" : "none";
+  } else {
+    nameInput.value = "";
+    deleteBtn.style.display = "none";
+  }
+  form.style.display = "";
+  nameInput.focus();
+}
+
+function closeProfileForm() {
+  document.getElementById("profileForm").style.display = "none";
+  editingProfileId = null;
+}
+
+document.getElementById("profilePills").addEventListener("click", (e) => {
+  if (e.target.closest("#profileAddPill")) { openProfileForm(null); return; }
+  if (e.target.closest("#copyChecklistPill")) {
+    const panel = document.getElementById("copyChecklistPanel");
+    const willOpen = !panel.classList.contains("open");
+    panel.classList.toggle("open", willOpen);
+    document.getElementById("copyChecklistPill").classList.toggle("active", willOpen);
+    return;
+  }
+  const pill = e.target.closest(".profile-pill-btn");
+  if (!pill) return;
+  const id = pill.dataset.id;
+  if (id === activeProfileId) {
+    openProfileForm(id); // tapping the already-active character edits it
+  } else {
+    switchProfile(id);
+  }
+});
+
+document.getElementById("copyChecklistPanel").addEventListener("click", (e) => {
+  const option = e.target.closest(".copy-checklist-option");
+  if (!option) return;
+  copyChecklistFrom(option.dataset.id);
+});
+
+document.addEventListener("click", (e) => {
+  const panel = document.getElementById("copyChecklistPanel");
+  const pill = document.getElementById("copyChecklistPill");
+  if (panel.classList.contains("open") && !panel.contains(e.target) && e.target !== pill && !pill?.contains(e.target)) {
+    closeCopyChecklistPanel();
+  }
+});
+
+document.getElementById("profileFormSaveBtn").addEventListener("click", () => {
+  const name = document.getElementById("profileNameInput").value.trim();
+  if (!name) return;
+  if (editingProfileId) {
+    updateProfile(editingProfileId, name);
+  } else {
+    addProfile(name);
+  }
+  closeProfileForm();
+});
+document.getElementById("profileFormCancelBtn").addEventListener("click", closeProfileForm);
+document.getElementById("profileFormDeleteBtn").addEventListener("click", () => {
+  if (editingProfileId) deleteProfile(editingProfileId);
+  closeProfileForm();
 });
 
 function showDailiesPage() {
@@ -3048,6 +3597,7 @@ function showDailiesPage() {
   document.getElementById("dailiesAddInput").value = "";
   document.getElementById("dailiesAddResults").classList.remove("open");
   renderDailies();
+  renderProfiles();
   renderSyncUI();
 }
 
@@ -3238,6 +3788,9 @@ window.addEventListener("error", (e) => {
 // ============================================================================
 try {
   validateCategories();
+  loadProfiles();
+  loadActiveProfileId();
+  migrateToProfilesIfNeeded();
   loadPins();
   loadChecked();
   loadStreak();
