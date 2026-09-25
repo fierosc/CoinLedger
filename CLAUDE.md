@@ -4,7 +4,6 @@ A moneymaking wiki for the Evolved PWI private server. Read this before editing 
 
 ## Working with the owner
 
-- **Explain simply.** The owner is new to GitHub. Keep replies short and plain, without jargon. Ask questions in plain text, not pop-up question tools.
 - **Never push to `main`.** Work on a branch, open a PR, and let the owner **squash and merge** it. Put follow-up tweaks into the same open PR rather than opening new ones.
 - **Show before merging.** Check changes in a browser at phone and desktop widths, and offer a screenshot preview.
 - **Follow through.** After opening a PR, watch it. After it's merged, confirm the "Build and deploy site" run succeeded and tell the owner it's live. Don't cancel scheduled check-ins.
