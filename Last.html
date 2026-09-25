@@ -1659,6 +1659,8 @@
 //   notes   - string, freeform detail (can be "")
 //   link    - OPTIONAL string, source URL (add matching entry to REFERENCES below)
 //   tasks   - OPTIONAL array of {task, kills, rewards[]} for multi-step quest chains
+//   breakdownLabel - OPTIONAL string, modal heading for `tasks`/`breakdown`
+//             when "Task Breakdown" doesn't fit (e.g. a dungeon scoreboard)
 //
 // HOW TO ADD A NEW CATEGORY (read this before editing):
 //   1. Add a new `const X_ENTRIES = [ ... ];` block below, fully self-contained
@@ -1923,6 +1925,28 @@ const DUNGEONS_INSTANCES_ENTRIES = [
     notes: "",
     link: "https://evolvedpw.com/database/article/flowsilver-palace",
     link2: "https://pwi.fandom.com/wiki/Flowsilver_Palace",
+  },
+  {
+    name: "Dragon's Cove",
+    stages: ["L"],
+    // FLAGGED: the source guide doesn't list a level requirement or an
+    // entry limit / cooldown, so both are "—" rather than a guess.
+    level: "—",
+    reward: "280–430 Dragon Tokens",
+    egValue: null, // paid in Dragon Tokens, no EG figure attached
+    freq: "—",
+    notesShort: "Endgame squad dungeon, 9–10 players (see details)",
+    notes: "Evolved's custom endgame farming dungeon, and the main way to get and complete Constellations. Enter through the Dragon Shrine NPC in Archosaur West (524, 663). Built for a squad of 9–10; smaller groups can try, but it gets much harder, and fewer players means better loot. All 7 bosses are dragons that spawn in random spots: find the first one, and after each kill the chat tells you where the next is (click its name to auto-target). There are no quests; rewards come from the scoreboard below and arrive by mail.",
+    link: "https://evolvedpw.com/database/article/dragons-cove-guide",
+    // Scoreboard: 280 for clearing all 7 bosses, plus up to 50 for each
+    // 1st-place finish (280 + 3 × 50 = 430 max).
+    breakdownLabel: "Scoreboard Rewards",
+    breakdown: [
+      { task: 1, title: "Defeat all 7 bosses", rewards: ["280 Dragon Tokens"] },
+      { task: 2, title: "Top Damage (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+      { task: 3, title: "Top Healing (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+      { task: 4, title: "Most Damage Taken (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+    ],
   },
   ICEBOUND_UNDERWORLD_ENTRY,
   UNCHARTED_PARADISE_ENTRY,
@@ -3034,7 +3058,7 @@ function openModal(name, categoryKeyHint) {
     }
     ${(entry.tasks || entry.breakdown) ? `
     <div class="modal-field">
-      <div class="modal-field-label">Task Breakdown</div>
+      <div class="modal-field-label">${entry.breakdownLabel || "Task Breakdown"}</div>
       <div class="task-list">
         ${(entry.tasks || entry.breakdown).map(t => `
           <div class="task-row">
