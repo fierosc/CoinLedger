@@ -1640,8 +1640,6 @@
 //             in parentheses next to the name — other categories that share
 //             the same entry object (e.g. Event Gold) never show it. Also
 //             included in search matching.
-//   stages  - array of "E" | "M" | "L" (early/mid/late game). Not currently
-//             used for filtering (removed for now), kept for future use.
 //   level   - string, level requirement or "—" if not applicable
 //   reward  - string, what you get (human-readable, shown in the table/modal)
 //   egValue - number | null. The single Event-Gold-equivalent number the
@@ -1693,7 +1691,6 @@ const ICEBOUND_UNDERWORLD_TASKS = [
 const ICEBOUND_UNDERWORLD_ENTRY = {
   name: "Icebound Underworld",
   abbr: "IBU",
-  stages: ["M"],
   level: "100+, R2 + SS1",
   // FLAGGED: this used to say "up to 20 EG", but ICEBOUND_UNDERWORLD_TASKS
   // above shows EG on tasks 1-4 (5+10+20+30), which sums to 65, not 20.
@@ -1718,7 +1715,6 @@ const UNCHARTED_PARADISE_TASKS = [
 const UNCHARTED_PARADISE_ENTRY = {
   name: "Uncharted Paradise",
   abbr: "UP",
-  stages: ["M"],
   level: "90+",
   reward: "4-quest chain: 50 EG total (Q1–Q3) + Cubi Gold (Q4) + 1x Glyph Pack Lv.4 (daily)",
   egValue: 50,
@@ -1733,7 +1729,6 @@ const UNCHARTED_PARADISE_ENTRY = {
 const MOLTEN_MINES_1_ENTRY = {
   name: "Molten Mines Lv.1",
   abbr: "MM",
-  stages: ["M"],
   level: "90+",
   reward: "5.5 EG",
   egValue: 5.5,
@@ -1743,7 +1738,6 @@ const MOLTEN_MINES_1_ENTRY = {
 const MOLTEN_MINES_2_ENTRY = {
   name: "Molten Mines Lv.2",
   abbr: "MM2",
-  stages: ["M"],
   level: "90+",
   reward: "7.5 EG",
   egValue: 7.5,
@@ -1753,7 +1747,6 @@ const MOLTEN_MINES_2_ENTRY = {
 const UNDISCOVERED_DUNGEON_ENTRY = {
   name: "Undiscovered Dungeon",
   abbr: "UDC",
-  stages: ["M"],
   level: "100+",
   reward: "28 EG",
   egValue: 28,
@@ -1763,7 +1756,6 @@ const UNDISCOVERED_DUNGEON_ENTRY = {
 const WARSONG_CITY_ENTRY = {
   name: "Warsong City",
   abbr: "FWS",
-  stages: ["M"],
   level: "85+",
   reward: "1 EG per run + R9 molds + Warsong Medals",
   egValue: 1,
@@ -1783,7 +1775,6 @@ const WARSONG_CITY_ENTRY = {
 const ENDLESS_UNIVERSE_ENTRY = {
   name: "Endless Universe",
   abbr: "EU",
-  stages: ["M"],
   level: "95+",
   reward: "5 EG",
   egValue: 5,
@@ -1797,7 +1788,6 @@ const ENDLESS_UNIVERSE_ENTRY = {
 const EVENT_GOLD_ENTRIES = [
   {
     name: "Voting",
-    stages: ["E"],
     level: "Any",
     reward: "EG (varies)",
     egValue: null, // amount depends which sites are up; no fixed number
@@ -1806,7 +1796,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Active Play (Gold Box)",
-    stages: ["E"],
     level: "30+",
     reward: "2 EG",
     egValue: 2,
@@ -1815,7 +1804,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Dragon Quests",
-    stages: ["E"],
     level: "19+",
     reward: "10.5 EG (Fu Chih)",
     egValue: 10.5, // upper bound: Fu Chih (highest bracket); lower brackets pay less
@@ -1837,7 +1825,6 @@ const EVENT_GOLD_ENTRIES = [
   ENDLESS_UNIVERSE_ENTRY,
   {
     name: "Jungle Ruins",
-    stages: ["E"],
     level: "30+",
     reward: "Up to 11 EG",
     egValue: 11, // upper bound of the range
@@ -1847,7 +1834,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Sunset Valley (Tank Wars)",
-    stages: ["E"],
     level: "100+",
     reward: "Tokens → EG (1–10 by rank)",
     egValue: 10, // upper bound of the range (top rank)
@@ -1857,7 +1843,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Celestial Tiger Event",
-    stages: ["E"],
     level: "30+",
     reward: "1–10 EG (top 6)",
     egValue: 10, // upper bound of the range (1st place)
@@ -1871,7 +1856,6 @@ const EVENT_GOLD_ENTRIES = [
   WARSONG_CITY_ENTRY,
   {
     name: "Cultivation Quest-Chain",
-    stages: ["M", "L"],
     level: "19+",
     reward: "21.35 EG total",
     egValue: 21.35,
@@ -1908,7 +1892,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   {
     name: "Flowsilver Palace: Judgment Mode",
     abbr: "JFSP",
-    stages: ["E"],
     level: "100+, Reawakened 1x, Arcane Sky I",
     reward: "Flowsilver Princess Treasure (5x Ultimate Refine Orb, 2x Flowsilver Emblem, 20x Fortification Essence, 5x General Summer Token, 5x Glyph Pack Lv.3) + 5x Basic Badge",
     egValue: null, // pure item/mat drops, no EG figure attached
@@ -1928,7 +1911,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   },
   {
     name: "Dragon's Cove",
-    stages: ["L"],
     // FLAGGED: the source guide doesn't list a level requirement or an
     // entry limit / cooldown, so both are "—" rather than a guess.
     level: "—",
@@ -1957,7 +1939,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   ENDLESS_UNIVERSE_ENTRY,
   {
     name: "Nirvana Palace",
-    stages: ["M"],
     level: "100+",
     reward: "Bosses drop 3-7x Iceshard Coins (random) plus Rapture Crystal and Uncanny Crystal drops",
     egValue: null, // pure item/mat drops, no EG figure attached
@@ -1982,7 +1963,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
 const MOLD_FARMING_ENTRIES = [
   {
     name: "Light Boots of Hermit",
-    stages: ["L"],
     level: "—",
     reward: "Thom Mundan",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -1992,7 +1972,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Heavy Vambraces of Hermit",
-    stages: ["L"],
     level: "—",
     reward: "Gaurnob Cloister Guard",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2002,7 +1981,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Bracers of Abandonment",
-    stages: ["L"],
     level: "—",
     reward: "Monoblat Dracoboa",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2012,7 +1990,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Boots of Shadow Fountain",
-    stages: ["L"],
     level: "—",
     reward: "Farren Sereneti",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2022,7 +1999,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Inferno Bracers",
-    stages: ["L"],
     level: "—",
     reward: "Calcid of the Flame",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2032,7 +2008,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Plate of Endless Warden",
-    stages: ["L"],
     level: "—",
     reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2042,7 +2017,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Scribe's Shoes",
-    stages: ["L"],
     level: "—",
     reward: "Voidweaver",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2052,7 +2026,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Sleeves of Demon Sword",
-    stages: ["L"],
     level: "—",
     reward: "Rancid Venerati",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2062,7 +2035,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Pants of Dragon Scales",
-    stages: ["L"],
     level: "—",
     reward: "Myriadtail Wyvern",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2072,7 +2044,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Boots of Tiger Strength",
-    stages: ["L"],
     level: "—",
     reward: "Fushma - Hexocolot Lieutenant",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2082,7 +2053,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Brahma's Lash",
-    stages: ["L"],
     level: "—",
     reward: "Phlebo",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2092,7 +2062,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Dragon's Bite",
-    stages: ["L"],
     level: "—",
     reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2102,7 +2071,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Fist of Heroism",
-    stages: ["L"],
     level: "—",
     reward: "Peachblossom Ritualist",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2112,7 +2080,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Midnight Black",
-    stages: ["L"],
     level: "—",
     reward: "Peachblossom Ritualist",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2122,7 +2089,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Sinister Shooter",
-    stages: ["L"],
     level: "—",
     reward: "Calcid of the Flame",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2132,7 +2098,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Adversity Daggers",
-    stages: ["L"],
     level: "—",
     reward: "Vile: The Incarcerate, worth ~20c (cubi gold)",
     egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
@@ -2142,7 +2107,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Greaves of Fallen",
-    stages: ["L"],
     level: "—",
     reward: "Auto Cultivation reward, worth ~20-25c (cubi gold)",
     rewardShort: "Auto Cultivation reward (see details)",
@@ -2158,7 +2122,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Mold: Cuisses of Hamadryad",
-    stages: ["L"],
     level: "—",
     reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
@@ -2174,7 +2137,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Mold: Pants of Demonic Evil",
-    stages: ["L"],
     level: "—",
     reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
@@ -2197,7 +2159,6 @@ const MOLD_FARMING_ENTRIES = [
 const MISCELLANEOUS_ENTRIES = [
   {
     name: "Decomposing NPC Gear",
-    stages: ["E", "M", "L"],
     level: "Blacksmith/Tailor skill",
     reward: "Perfect Stones, Pakua Stones",
     egValue: null,
@@ -2207,7 +2168,6 @@ const MISCELLANEOUS_ENTRIES = [
   },
   {
     name: "Sovereign's Seal",
-    stages: ["L"],
     level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89, unconfirmed)",
     reward: "2x Sigil of Nightbloom per day",
     egValue: null,
