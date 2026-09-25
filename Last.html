@@ -1927,19 +1927,19 @@ const DUNGEONS_INSTANCES_ENTRIES = [
     name: "Flowsilver Palace: Judgment Mode",
     abbr: "JFSP",
     level: "100+, Reawakened 1x, Arcane Sky I",
-    reward: "Flowsilver Princess Treasure (5x Ultimate Refine Orb, 2x Flowsilver Emblem, 20x Fortification Essence, 5x General Summer Token, 5x Glyph Pack Lv.3) + 5x Basic Badge",
+    reward: "Per run: 2x Flowsilver Princess Treasure, 1x Flowsilver Prince Treasure + 5x Basic Badge (full contents below)",
+    rewardShort: "Prince & Princess Treasures + Badges",
     egValue: null, // pure item/mat drops, no EG figure attached
-    // Item breakdown for the reward text above (kept for reference).
-    rewardItems: [
-      { name: "Ultimate Refine Orb", qty: 5 },
-      { name: "Flowsilver Emblem", qty: 2 },
-      { name: "Fortification Essence", qty: 20 },
-      { name: "General Summer Token", qty: 5 },
-      { name: "Glyph Pack Lv.3", qty: 5 },
-      { name: "Basic Badge", qty: 5 },
-    ],
     freq: "Unlimited entries; daily quest 1x/day",
     notes: "",
+    // Replaces the old rewardItems list, which only fed the removed Value
+    // badge. Same items, now shown in the popup like other dungeons.
+    breakdownLabel: "Rewards",
+    breakdown: [
+      { task: 1, title: "2x Flowsilver Princess Treasure", objective: "Opening one uses your Prince token. Each gives", rewards: ["5x Ultimate Refine Orb", "2x Flowsilver Emblem", "20x Fortification Essence", "5x General Summer Token", "5x Glyph Pack Lv.3"] },
+      { task: 2, title: "1x Flowsilver Prince Treasure", objective: "Opening it gives", rewards: ["1x Common Refine Orb Pack", "1x Rare Refine Orb Pack", "2x Flowsilver Emblem", "20x Fortification Essence"] },
+      { task: 3, title: "Basic Badge", rewards: ["5x Basic Badge"] },
+    ],
     link: "https://evolvedpw.com/database/article/flowsilver-palace",
     link2: "https://pwi.fandom.com/wiki/Flowsilver_Palace",
   },
