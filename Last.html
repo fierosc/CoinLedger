@@ -486,6 +486,14 @@
     font-style: italic;
     cursor: default;
   }
+  /* Desktop swaps the item chips for one "+N items" chip so chain rows
+     stay about as tall as their neighbours (see renderRewardCell). */
+  .reward-chip.reward-chip-more-desktop { display: none; }
+  @media (min-width: 880px) {
+    .reward-chip.reward-chip-item,
+    .reward-chip.reward-chip-more-mobile { display: none; }
+    .reward-chip.reward-chip-more-desktop { display: inline-block; }
+  }
 
   .empty-state {
     padding: 28px 16px;
@@ -2822,6 +2830,12 @@ function aggregateTaskRewards(tasks) {
 // capped so the row doesn't sprawl, with a "+N more" chip (hover for the
 // rest) covering the overflow. Full detail is always one click away in
 // the modal regardless.
+//
+// Desktop (≥880px) goes further: the Reward column is only ~260px wide,
+// so item chips stacked one per line and made these rows 4–5x taller
+// than their neighbours. There, only the currency chips show, plus a
+// single "+N items" chip (hover lists them all). Both chip sets are
+// rendered and CSS picks one per breakpoint, so no resize JS is needed.
 
 function renderRewardCell(entry, categoryKey) {
   const cellClass = categoryKey === "mold-farming" ? "col-boss" : "col-reward";
@@ -2842,15 +2856,19 @@ function renderRewardCell(entry, categoryKey) {
   const chip = (r, extraClass) =>
     `<span class="reward-chip${extraClass ? " " + extraClass : ""}">${r.qty !== null ? r.qty + "x " : ""}${r.name}</span>`;
 
+  const listLabel = list => list
+    .map(r => (r.qty !== null ? `${r.qty}x ${r.name}` : r.name))
+    .join(", ");
+
   let chipsHtml =
     currency.map(r => chip(r, "reward-chip-gold")).join("") +
-    shown.map(r => chip(r)).join("");
+    shown.map(r => chip(r, "reward-chip-item")).join("");
 
   if (hidden.length > 0) {
-    const hiddenLabel = hidden
-      .map(r => (r.qty !== null ? `${r.qty}x ${r.name}` : r.name))
-      .join(", ");
-    chipsHtml += `<span class="reward-chip reward-chip-more" title="${escapeAttr(hiddenLabel)}">+${hidden.length} more</span>`;
+    chipsHtml += `<span class="reward-chip reward-chip-more reward-chip-more-mobile" title="${escapeAttr(listLabel(hidden))}">+${hidden.length} more</span>`;
+  }
+  if (items.length > 0) {
+    chipsHtml += `<span class="reward-chip reward-chip-more reward-chip-more-desktop" title="${escapeAttr(listLabel(items))}">+${items.length} ${items.length === 1 ? "item" : "items"}</span>`;
   }
 
   return `<div class="${cellClass}"><div class="reward-total-label">(total)</div><div class="reward-chips">${chipsHtml}</div></div>`;
