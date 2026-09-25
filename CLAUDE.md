@@ -2,6 +2,14 @@
 
 A moneymaking wiki for the Evolved PWI private server. Read this before editing so changes match the existing design, layout, and code style.
 
+## Working with the owner
+
+- **Explain simply.** The owner is new to GitHub. Keep replies short and plain, without jargon. Ask questions in plain text, not pop-up question tools.
+- **Never push to `main`.** Work on a branch, open a PR, and let the owner **squash and merge** it. Put follow-up tweaks into the same open PR rather than opening new ones.
+- **Show before merging.** Check changes in a browser at phone and desktop widths, and offer a screenshot preview.
+- **Follow through.** After opening a PR, watch it. After it's merged, confirm the "Build and deploy site" run succeeded and tell the owner it's live. Don't cancel scheduled check-ins.
+- **Don't guess game data.** If a source doesn't give a value, use `"—"` with a `// FLAGGED:` comment and ask the owner.
+
 ## Project shape
 
 - **`Last.html` is the whole site.** It's one hand-edited file: `<head>` meta/SEO, a single `<style>` block, static HTML for each "page", one main `<script>` holding data and logic, and a small separate **watchdog** `<script>` at the end. Don't use a framework or bundler, and don't split it into more files.
