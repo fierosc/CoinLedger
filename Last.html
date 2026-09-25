@@ -486,6 +486,14 @@
     font-style: italic;
     cursor: default;
   }
+  /* Desktop swaps the item chips for one "+N items" chip so chain rows
+     stay about as tall as their neighbours (see renderRewardCell). */
+  .reward-chip.reward-chip-more-desktop { display: none; }
+  @media (min-width: 880px) {
+    .reward-chip.reward-chip-item,
+    .reward-chip.reward-chip-more-mobile { display: none; }
+    .reward-chip.reward-chip-more-desktop { display: inline-block; }
+  }
 
   .empty-state {
     padding: 28px 16px;
@@ -1640,8 +1648,6 @@
 //             in parentheses next to the name — other categories that share
 //             the same entry object (e.g. Event Gold) never show it. Also
 //             included in search matching.
-//   stages  - array of "E" | "M" | "L" (early/mid/late game). Not currently
-//             used for filtering (removed for now), kept for future use.
 //   level   - string, level requirement or "—" if not applicable
 //   reward  - string, what you get (human-readable, shown in the table/modal)
 //   egValue - number | null. The single Event-Gold-equivalent number the
@@ -1659,6 +1665,8 @@
 //   notes   - string, freeform detail (can be "")
 //   link    - OPTIONAL string, source URL (add matching entry to REFERENCES below)
 //   tasks   - OPTIONAL array of {task, kills, rewards[]} for multi-step quest chains
+//   breakdownLabel - OPTIONAL string, modal heading for `tasks`/`breakdown`
+//             when "Task Breakdown" doesn't fit (e.g. a dungeon scoreboard)
 //
 // HOW TO ADD A NEW CATEGORY (read this before editing):
 //   1. Add a new `const X_ENTRIES = [ ... ];` block below, fully self-contained
@@ -1691,7 +1699,6 @@ const ICEBOUND_UNDERWORLD_TASKS = [
 const ICEBOUND_UNDERWORLD_ENTRY = {
   name: "Icebound Underworld",
   abbr: "IBU",
-  stages: ["M"],
   level: "100+, R2 + SS1",
   // FLAGGED: this used to say "up to 20 EG", but ICEBOUND_UNDERWORLD_TASKS
   // above shows EG on tasks 1-4 (5+10+20+30), which sums to 65, not 20.
@@ -1716,7 +1723,6 @@ const UNCHARTED_PARADISE_TASKS = [
 const UNCHARTED_PARADISE_ENTRY = {
   name: "Uncharted Paradise",
   abbr: "UP",
-  stages: ["M"],
   level: "90+",
   reward: "4-quest chain: 50 EG total (Q1–Q3) + Cubi Gold (Q4) + 1x Glyph Pack Lv.4 (daily)",
   egValue: 50,
@@ -1731,7 +1737,6 @@ const UNCHARTED_PARADISE_ENTRY = {
 const MOLTEN_MINES_1_ENTRY = {
   name: "Molten Mines Lv.1",
   abbr: "MM",
-  stages: ["M"],
   level: "90+",
   reward: "5.5 EG",
   egValue: 5.5,
@@ -1741,7 +1746,6 @@ const MOLTEN_MINES_1_ENTRY = {
 const MOLTEN_MINES_2_ENTRY = {
   name: "Molten Mines Lv.2",
   abbr: "MM2",
-  stages: ["M"],
   level: "90+",
   reward: "7.5 EG",
   egValue: 7.5,
@@ -1751,7 +1755,6 @@ const MOLTEN_MINES_2_ENTRY = {
 const UNDISCOVERED_DUNGEON_ENTRY = {
   name: "Undiscovered Dungeon",
   abbr: "UDC",
-  stages: ["M"],
   level: "100+",
   reward: "28 EG",
   egValue: 28,
@@ -1761,7 +1764,6 @@ const UNDISCOVERED_DUNGEON_ENTRY = {
 const WARSONG_CITY_ENTRY = {
   name: "Warsong City",
   abbr: "FWS",
-  stages: ["M"],
   level: "85+",
   reward: "1 EG per run + R9 molds + Warsong Medals",
   egValue: 1,
@@ -1781,7 +1783,6 @@ const WARSONG_CITY_ENTRY = {
 const ENDLESS_UNIVERSE_ENTRY = {
   name: "Endless Universe",
   abbr: "EU",
-  stages: ["M"],
   level: "95+",
   reward: "5 EG",
   egValue: 5,
@@ -1795,7 +1796,6 @@ const ENDLESS_UNIVERSE_ENTRY = {
 const EVENT_GOLD_ENTRIES = [
   {
     name: "Voting",
-    stages: ["E"],
     level: "Any",
     reward: "EG (varies)",
     egValue: null, // amount depends which sites are up; no fixed number
@@ -1804,7 +1804,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Active Play (Gold Box)",
-    stages: ["E"],
     level: "30+",
     reward: "2 EG",
     egValue: 2,
@@ -1813,7 +1812,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Dragon Quests",
-    stages: ["E"],
     level: "19+",
     reward: "10.5 EG (Fu Chih)",
     egValue: 10.5, // upper bound: Fu Chih (highest bracket); lower brackets pay less
@@ -1835,7 +1833,6 @@ const EVENT_GOLD_ENTRIES = [
   ENDLESS_UNIVERSE_ENTRY,
   {
     name: "Jungle Ruins",
-    stages: ["E"],
     level: "30+",
     reward: "Up to 11 EG",
     egValue: 11, // upper bound of the range
@@ -1845,7 +1842,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Sunset Valley (Tank Wars)",
-    stages: ["E"],
     level: "100+",
     reward: "Tokens → EG (1–10 by rank)",
     egValue: 10, // upper bound of the range (top rank)
@@ -1855,7 +1851,6 @@ const EVENT_GOLD_ENTRIES = [
   },
   {
     name: "Celestial Tiger Event",
-    stages: ["E"],
     level: "30+",
     reward: "1–10 EG (top 6)",
     egValue: 10, // upper bound of the range (1st place)
@@ -1869,7 +1864,6 @@ const EVENT_GOLD_ENTRIES = [
   WARSONG_CITY_ENTRY,
   {
     name: "Cultivation Quest-Chain",
-    stages: ["M", "L"],
     level: "19+",
     reward: "21.35 EG total",
     egValue: 21.35,
@@ -1906,7 +1900,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   {
     name: "Flowsilver Palace: Judgment Mode",
     abbr: "JFSP",
-    stages: ["L"],
     level: "100+, Reawakened 1x, Arcane Sky I",
     reward: "Flowsilver Princess Treasure (5x Ultimate Refine Orb, 2x Flowsilver Emblem, 20x Fortification Essence, 5x General Summer Token, 5x Glyph Pack Lv.3) + 5x Basic Badge",
     egValue: null, // pure item/mat drops, no EG figure attached
@@ -1924,6 +1917,27 @@ const DUNGEONS_INSTANCES_ENTRIES = [
     link: "https://evolvedpw.com/database/article/flowsilver-palace",
     link2: "https://pwi.fandom.com/wiki/Flowsilver_Palace",
   },
+  {
+    name: "Dragon's Cove",
+    // FLAGGED: the source guide doesn't list a level requirement, so it's
+    // "—" rather than a guess.
+    level: "—",
+    reward: "280–430 Dragon Tokens",
+    egValue: null, // paid in Dragon Tokens, no EG figure attached
+    freq: "Unlimited entries",
+    notesShort: "Endgame squad dungeon, 9–10 players (see details)",
+    notes: "Evolved's custom endgame farming dungeon, and the main way to get and complete Constellations. Enter through the Dragon Shrine NPC in Archosaur West (524, 663). Built for a squad of 9–10; smaller groups can try, but it gets much harder. All 7 bosses are dragons that spawn in random spots: find the first one, and after each kill the chat tells you where the next is (click its name to auto-target). There are no quests; rewards come from the scoreboard below and arrive by mail.",
+    link: "https://evolvedpw.com/database/article/dragons-cove-guide",
+    // Scoreboard: 280 for clearing all 7 bosses, plus up to 50 for each
+    // 1st-place finish (280 + 3 × 50 = 430 max).
+    breakdownLabel: "Scoreboard Rewards",
+    breakdown: [
+      { task: 1, title: "Defeat all 7 bosses", rewards: ["280 Dragon Tokens"] },
+      { task: 2, title: "Top Damage (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+      { task: 3, title: "Top Healing (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+      { task: 4, title: "Most Damage Taken (1st / 2nd / 3rd)", rewards: ["50 / 45 / 40 Dragon Tokens"] },
+    ],
+  },
   ICEBOUND_UNDERWORLD_ENTRY,
   UNCHARTED_PARADISE_ENTRY,
   MOLTEN_MINES_1_ENTRY,
@@ -1933,7 +1947,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
   ENDLESS_UNIVERSE_ENTRY,
   {
     name: "Nirvana Palace",
-    stages: ["M"],
     level: "100+",
     reward: "Bosses drop 3-7x Iceshard Coins (random) plus Rapture Crystal and Uncanny Crystal drops",
     egValue: null, // pure item/mat drops, no EG figure attached
@@ -1958,7 +1971,6 @@ const DUNGEONS_INSTANCES_ENTRIES = [
 const MOLD_FARMING_ENTRIES = [
   {
     name: "Light Boots of Hermit",
-    stages: ["L"],
     level: "—",
     reward: "Thom Mundan",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -1968,7 +1980,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Heavy Vambraces of Hermit",
-    stages: ["L"],
     level: "—",
     reward: "Gaurnob Cloister Guard",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -1978,7 +1989,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Bracers of Abandonment",
-    stages: ["L"],
     level: "—",
     reward: "Monoblat Dracoboa",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -1988,7 +1998,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Boots of Shadow Fountain",
-    stages: ["L"],
     level: "—",
     reward: "Farren Sereneti",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -1998,7 +2007,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Inferno Bracers",
-    stages: ["L"],
     level: "—",
     reward: "Calcid of the Flame",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2008,7 +2016,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Plate of Endless Warden",
-    stages: ["L"],
     level: "—",
     reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2018,7 +2025,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Scribe's Shoes",
-    stages: ["L"],
     level: "—",
     reward: "Voidweaver",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2028,7 +2034,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Sleeves of Demon Sword",
-    stages: ["L"],
     level: "—",
     reward: "Rancid Venerati",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2038,7 +2043,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Pants of Dragon Scales",
-    stages: ["L"],
     level: "—",
     reward: "Myriadtail Wyvern",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2048,7 +2052,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Boots of Tiger Strength",
-    stages: ["L"],
     level: "—",
     reward: "Fushma - Hexocolot Lieutenant",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2058,7 +2061,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Brahma's Lash",
-    stages: ["L"],
     level: "—",
     reward: "Phlebo",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2068,7 +2070,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Dragon's Bite",
-    stages: ["L"],
     level: "—",
     reward: "Trap Master Fierce, Hellfire Abomination, or Queen of Agony (Xipher)",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2078,7 +2079,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Fist of Heroism",
-    stages: ["L"],
     level: "—",
     reward: "Peachblossom Ritualist",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2088,7 +2088,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Midnight Black",
-    stages: ["L"],
     level: "—",
     reward: "Peachblossom Ritualist",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2098,7 +2097,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Sinister Shooter",
-    stages: ["L"],
     level: "—",
     reward: "Calcid of the Flame",
     egValue: null, // pure item/mat drop, no EG figure attached
@@ -2108,7 +2106,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Adversity Daggers",
-    stages: ["L"],
     level: "—",
     reward: "Vile: The Incarcerate, worth ~20c (cubi gold)",
     egValue: null, // pure item drop, no EG figure attached; cubi gold value noted in reward text
@@ -2118,7 +2115,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Greaves of Fallen",
-    stages: ["L"],
     level: "—",
     reward: "Auto Cultivation reward, worth ~20-25c (cubi gold)",
     rewardShort: "Auto Cultivation reward (see details)",
@@ -2134,7 +2130,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Mold: Cuisses of Hamadryad",
-    stages: ["L"],
     level: "—",
     reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
@@ -2150,7 +2145,6 @@ const MOLD_FARMING_ENTRIES = [
   },
   {
     name: "Mold: Pants of Demonic Evil",
-    stages: ["L"],
     level: "—",
     reward: "Gold Mold (90+) quest reward, worth ~20-25c (cubi gold)",
     rewardShort: "Gold Mold (90+) quest reward (see details)",
@@ -2173,7 +2167,6 @@ const MOLD_FARMING_ENTRIES = [
 const MISCELLANEOUS_ENTRIES = [
   {
     name: "Decomposing NPC Gear",
-    stages: ["E", "M", "L"],
     level: "Blacksmith/Tailor skill",
     reward: "Perfect Stones, Pakua Stones",
     egValue: null,
@@ -2183,7 +2176,6 @@ const MISCELLANEOUS_ENTRIES = [
   },
   {
     name: "Sovereign's Seal",
-    stages: ["L"],
     level: "90+, Aware of Vacuity (79 cultivation) or Aware of Myriad/Void (Sage/Demon, 89, unconfirmed)",
     reward: "2x Sigil of Nightbloom per day",
     egValue: null,
@@ -2838,6 +2830,12 @@ function aggregateTaskRewards(tasks) {
 // capped so the row doesn't sprawl, with a "+N more" chip (hover for the
 // rest) covering the overflow. Full detail is always one click away in
 // the modal regardless.
+//
+// Desktop (≥880px) goes further: the Reward column is only ~260px wide,
+// so item chips stacked one per line and made these rows 4–5x taller
+// than their neighbours. There, only the currency chips show, plus a
+// single "+N items" chip (hover lists them all). Both chip sets are
+// rendered and CSS picks one per breakpoint, so no resize JS is needed.
 
 function renderRewardCell(entry, categoryKey) {
   const cellClass = categoryKey === "mold-farming" ? "col-boss" : "col-reward";
@@ -2858,15 +2856,19 @@ function renderRewardCell(entry, categoryKey) {
   const chip = (r, extraClass) =>
     `<span class="reward-chip${extraClass ? " " + extraClass : ""}">${r.qty !== null ? r.qty + "x " : ""}${r.name}</span>`;
 
+  const listLabel = list => list
+    .map(r => (r.qty !== null ? `${r.qty}x ${r.name}` : r.name))
+    .join(", ");
+
   let chipsHtml =
     currency.map(r => chip(r, "reward-chip-gold")).join("") +
-    shown.map(r => chip(r)).join("");
+    shown.map(r => chip(r, "reward-chip-item")).join("");
 
   if (hidden.length > 0) {
-    const hiddenLabel = hidden
-      .map(r => (r.qty !== null ? `${r.qty}x ${r.name}` : r.name))
-      .join(", ");
-    chipsHtml += `<span class="reward-chip reward-chip-more" title="${escapeAttr(hiddenLabel)}">+${hidden.length} more</span>`;
+    chipsHtml += `<span class="reward-chip reward-chip-more reward-chip-more-mobile" title="${escapeAttr(listLabel(hidden))}">+${hidden.length} more</span>`;
+  }
+  if (items.length > 0) {
+    chipsHtml += `<span class="reward-chip reward-chip-more reward-chip-more-desktop" title="${escapeAttr(listLabel(items))}">+${items.length} ${items.length === 1 ? "item" : "items"}</span>`;
   }
 
   return `<div class="${cellClass}"><div class="reward-total-label">(total)</div><div class="reward-chips">${chipsHtml}</div></div>`;
@@ -3034,7 +3036,7 @@ function openModal(name, categoryKeyHint) {
     }
     ${(entry.tasks || entry.breakdown) ? `
     <div class="modal-field">
-      <div class="modal-field-label">Task Breakdown</div>
+      <div class="modal-field-label">${entry.breakdownLabel || "Task Breakdown"}</div>
       <div class="task-list">
         ${(entry.tasks || entry.breakdown).map(t => `
           <div class="task-row">
