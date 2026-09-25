@@ -1762,10 +1762,21 @@ const MOLTEN_MINES_2_ENTRY = {
   name: "Molten Mines Lv.2",
   abbr: "MM2",
   level: "90+",
-  reward: "7.5 EG",
-  egValue: 7.5,
+  reward: "7.5 EG, plus Molten Boxes, a Badge and a chance at Incantation Spellbooks from the other quests",
+  rewardShort: "7.5 EG + items",
+  egValue: 7.5, // The King and Queens quest; the other rewards are items only
   freq: "Daily",
-  notes: "10-man squad",
+  notesShort: "10-man squad",
+  notes: "10-man squad. Daily quests come from the Old Elite Dwarf Knight inside the dungeon; the Bounty Quest auto-attaches on entry.",
+  breakdownLabel: "Daily Quests & Drops",
+  breakdown: [
+    { task: 1, title: "The King and Queens", objective: "Kill the 2 Dwarf Queens and the Dwarf King (the final 3 bosses)", rewards: ["7.5 EG"] },
+    { task: 2, title: "Kill the Evil Dwarf Lords", objective: "Kill every boss up to the Queens and King. Gives 1 Badge, used to craft Mysterious Sack of Gems", rewards: ["Legion Commander", "Army Captain", "Army Ranger", "Executioner", "Swordmaster", "Master of Mechanics", "Master of Engineer"] },
+    { task: 3, title: "Clear the Molten Mines", objective: "Kill every mob in Molten Mines Lv.2", rewards: ["2x Molten Box"] },
+    { task: 4, title: "Bounty Quest", objective: "Kill the Dwarf King to unlock a quest for a specific World Boss. 50% drop chance; spellbooks craft a Copper, Silver or Gold Box", rewards: ["Incantation Spellbook", "Epic Incantation Spellbook", "Legendary Incantation Spellbook"] },
+    { task: 5, title: "Dwarf King drops", rewards: ["Crown of the King (1%)", "Blacksmith Hammer (0.8%)", "Mysterious Dwarf Potion (5%)", "Dwarf Armor Fragment (93.2%)"] },
+    { task: 6, title: "Dwarf Queen drops", rewards: ["Crown of the Queen (1%)", "Blacksmith Hammer (0.8%)", "Mysterious Dwarf Potion (5%)", "Dwarf Armor Fragment (93.2%)"] },
+  ],
 };
 const UNDISCOVERED_DUNGEON_ENTRY = {
   name: "Undiscovered Dungeon",
