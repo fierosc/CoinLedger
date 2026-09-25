@@ -645,6 +645,8 @@
   }
   .task-kills { color: var(--text-faint); font-weight: 400; }
   .task-rewards { font-size: 12.5px; color: var(--text-dim); line-height: 1.4; }
+  /* Optional one-line "what to do" under a breakdown row's title. */
+  .task-objective { font-size: 12px; color: var(--text-faint); line-height: 1.4; margin-bottom: 3px; }
 
   @media (max-width: 700px) {
     .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-notes, .col-title, .col-location { font-size: 12px; }
@@ -1665,6 +1667,9 @@
 //   notes   - string, freeform detail (can be "")
 //   link    - OPTIONAL string, source URL (add matching entry to REFERENCES below)
 //   tasks   - OPTIONAL array of {task, kills, rewards[]} for multi-step quest chains
+//   breakdown - OPTIONAL array of {task, title, objective?, rewards[]} shown in
+//             the modal only (unlike `tasks`, never summed into reward chips).
+//             `objective` is an optional short "what to do" line.
 //   breakdownLabel - OPTIONAL string, modal heading for `tasks`/`breakdown`
 //             when "Task Breakdown" doesn't fit (e.g. a dungeon scoreboard)
 //
@@ -1707,7 +1712,7 @@ const ICEBOUND_UNDERWORLD_ENTRY = {
   reward: "6-task chain: 65 EG total (tasks 1–4) + Evolved Engrave Stones, Immortal Gift Packs, Weapon Fashion Pack, Glyph Lv.8",
   egValue: 65,
   freq: "Quest chain: boss per task is randomized, each task harder than the last",
-  notes: "Access via Icebound Gatekeeper Sho, Archosaur City (West district). Quest cannot be trashed. Rewards based on Theater of Blood items.",
+  notes: "Access via Icebound Gatekeeper Sho, Archosaur City (West district). Rewards based on Theater of Blood items.",
   link: "https://evolvedpw.com/database/article/icebound-underworld-quest",
   tasks: ICEBOUND_UNDERWORLD_TASKS,
 };
@@ -1738,19 +1743,40 @@ const MOLTEN_MINES_1_ENTRY = {
   name: "Molten Mines Lv.1",
   abbr: "MM",
   level: "90+",
-  reward: "5.5 EG",
-  egValue: 5.5,
+  reward: "5.5 EG, plus Molten Boxes, Deep Sea Crates and Soldier's Pay from the other dailies",
+  rewardShort: "5.5 EG + Molten Boxes",
+  egValue: 5.5, // The Three Brothers quest; the other rewards are items only
   freq: "Daily",
   notes: "10-man squad",
+  breakdownLabel: "Daily Quests & Drops",
+  breakdown: [
+    { task: 1, title: "The Three Brothers", objective: "Kill the Reflections of Cthulhu, Kthanid and Hastur", rewards: ["5.5 EG"] },
+    { task: 2, title: "Kill the Insignia Bosses", objective: "Kill every boss in Molten Mines, one after another", rewards: ["Reward 1: 50x Soldier's Pay", "Reward 2: 1x Deep Sea Crate + 1x Molten Box"] },
+    { task: 3, title: "Clear the Mine", objective: "Kill 110 Fiery BloodThirsters", rewards: ["1x Molten Box", "50x Soldier's Pay"] },
+    { task: 4, title: "Mob drops", objective: "Any mob in Molten Mines", rewards: ["Molten Fragment"] },
+    { task: 5, title: "Boss drops", objective: "Chance to drop one of", rewards: ["Molten Fragment", "Deep Sea Crate", "Cosmic Key"] },
+    { task: 6, title: "Deep Sea Crate", objective: "Opening it gives Insignias (7 kinds)", rewards: ["Cthulhu", "Vulthoom", "Nug and Yeb", "Yig", "Gol-Goroth", "Atlach-Nacha", "Juk-Shabb"] },
+  ],
 };
 const MOLTEN_MINES_2_ENTRY = {
   name: "Molten Mines Lv.2",
   abbr: "MM2",
   level: "90+",
-  reward: "7.5 EG",
-  egValue: 7.5,
+  reward: "7.5 EG, plus Molten Boxes, a Badge and a chance at Incantation Spellbooks from the other quests",
+  rewardShort: "7.5 EG + Dwarf Armor Fragments",
+  egValue: 7.5, // The King and Queens quest; the other rewards are items only
   freq: "Daily",
-  notes: "10-man squad",
+  notesShort: "10-man squad",
+  notes: "10-man squad. Daily quests come from the Old Elite Dwarf Knight inside the dungeon; the Bounty Quest auto-attaches on entry.",
+  breakdownLabel: "Daily Quests & Drops",
+  breakdown: [
+    { task: 1, title: "The King and Queens", objective: "Kill the 2 Dwarf Queens and the Dwarf King (the final 3 bosses)", rewards: ["7.5 EG"] },
+    { task: 2, title: "Kill the Evil Dwarf Lords", objective: "Kill every boss up to the Queens and King. Gives 1 Badge, used to craft Mysterious Sack of Gems", rewards: ["Legion Commander", "Army Captain", "Army Ranger", "Executioner", "Swordmaster", "Master of Mechanics", "Master of Engineer"] },
+    { task: 3, title: "Clear the Molten Mines", objective: "Kill every mob in Molten Mines Lv.2", rewards: ["2x Molten Box"] },
+    { task: 4, title: "Bounty Quest", objective: "Kill the Dwarf King to unlock a quest for a specific World Boss. 50% drop chance; spellbooks craft a Copper, Silver or Gold Box", rewards: ["Incantation Spellbook", "Epic Incantation Spellbook", "Legendary Incantation Spellbook"] },
+    { task: 5, title: "Dwarf King drops", rewards: ["Crown of the King (1%)", "Blacksmith Hammer (0.8%)", "Mysterious Dwarf Potion (5%)", "Dwarf Armor Fragment (93.2%)"] },
+    { task: 6, title: "Dwarf Queen drops", rewards: ["Crown of the Queen (1%)", "Blacksmith Hammer (0.8%)", "Mysterious Dwarf Potion (5%)", "Dwarf Armor Fragment (93.2%)"] },
+  ],
 };
 const UNDISCOVERED_DUNGEON_ENTRY = {
   name: "Undiscovered Dungeon",
@@ -3041,6 +3067,7 @@ function openModal(name, categoryKeyHint) {
         ${(entry.tasks || entry.breakdown).map(t => `
           <div class="task-row">
             <div class="task-num">${t.title ? t.title : `Task ${t.task}`}${t.kills ? `<span class="task-kills">${t.kills} kills</span>` : ""}</div>
+            ${t.objective ? `<div class="task-objective">${t.objective}</div>` : ""}
             <div class="task-rewards">${t.rewards.join(" · ")}</div>
           </div>
         `).join("")}
