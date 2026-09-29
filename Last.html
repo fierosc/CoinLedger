@@ -33,6 +33,13 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  // Returning visitors skip the landing gate (see LANDING PAGE in the main
+  // script). This runs in <head>, before anything paints, only to hide the
+  // gate early so it doesn't flash on screen before the main script at the
+  // end of <body> gets to swap in the wiki.
+  try { if (localStorage.getItem("coinLedgerSeenLanding")) document.documentElement.classList.add("skip-landing"); } catch (e) {}
+</script>
 <style>
   :root {
     --bg: #14161F;
@@ -826,6 +833,10 @@
   }
   .landing-enter:hover { background: var(--gold); color: #14161F; }
   .landing-enter:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* Set by the tiny <head> script for returning visitors; removed once init
+     has shown the wiki, so the brand mark can still bring the gate back. */
+  html.skip-landing .landing { display: none; }
 
   /* app content is hidden behind the landing page until "Enter" is clicked */
   .app-shell.hidden { display: none; }
@@ -3801,9 +3812,26 @@ function renderLandingStats() {
   el.textContent = `${totalEntries} methods · ${CATEGORIES.length} categories · ${REFERENCES.length} sources`;
 }
 
+// The gate is a first-visit welcome, not something to click through every
+// time: entering once remembers it, and later loads open straight on the
+// wiki (the brand mark still brings the gate back on demand).
+const SEEN_LANDING_KEY = "coinLedgerSeenLanding";
+
+function hasSeenLanding() {
+  try { return !!localStorage.getItem(SEEN_LANDING_KEY); } catch (e) { return false; }
+}
+
 function enterLedger() {
   document.getElementById("landing").classList.add("hidden");
   document.getElementById("appShell").classList.remove("hidden");
+  try { localStorage.setItem(SEEN_LANDING_KEY, "1"); } catch (e) {}
+}
+
+// Called at init: skip the gate for returning visitors, then drop the early
+// <head> hide so backToLanding() can show the gate again.
+function applyLandingPreference() {
+  if (hasSeenLanding()) enterLedger();
+  document.documentElement.classList.remove("skip-landing");
 }
 
 document.getElementById("enterBtn").addEventListener("click", enterLedger);
@@ -3872,6 +3900,7 @@ try {
   renderNotes();
   renderCategoryFilters();
   renderLandingStats();
+  applyLandingPreference();
   render();
   syncPinUI();
   window.__ledgerInitialized = true; // seen by the watchdog script below
