@@ -648,6 +648,35 @@
   /* Optional one-line "what to do" under a breakdown row's title. */
   .task-objective { font-size: 12px; color: var(--text-faint); line-height: 1.4; margin-bottom: 3px; }
 
+  /* ---- MODAL LANDSCAPE (desktop) ---- */
+  /* On phones the modal is one stacked column. On desktop, entries with a
+     task/reward breakdown were a tall, narrow strip with the page wasted on
+     either side, so the panel widens and splits in two: details (level,
+     reward, frequency, notes, links) on the left, the breakdown list on the
+     right. The header (title, category, pin) spans both. Entries without a
+     breakdown only widen slightly, since a second column would sit empty. */
+  @media (min-width: 880px) {
+    .modal-panel { max-width: 520px; padding: 26px 28px; }
+    .modal-panel.has-side { max-width: 900px; }
+    .modal-panel.has-side .modal-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      grid-template-rows: auto 1fr;
+      column-gap: 28px;
+      align-items: start;
+    }
+    /* Links render last in the markup so phones keep them at the bottom;
+       on desktop they tuck under the details column instead. */
+    .modal-panel.has-side .modal-main { grid-column: 1; grid-row: 1; }
+    .modal-panel.has-side .modal-links { grid-column: 1; grid-row: 2; }
+    .modal-panel.has-side .modal-side {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      border-left: 1px solid var(--rule-soft);
+      padding-left: 28px;
+    }
+  }
+
   @media (max-width: 700px) {
     .col-level, .col-reward, .col-boss, .col-freq, .col-drop, .col-notes, .col-title, .col-location { font-size: 12px; }
 
@@ -3028,6 +3057,10 @@ function openModal(name, categoryKeyHint) {
   const { location, title } = isMoldFarming ? splitLocationTitle(entry.notes) : { location: "", title: "" };
 
   const panel = document.getElementById("modalPanel");
+  // Entries with a breakdown get the two-column desktop layout (see the
+  // MODAL LANDSCAPE CSS); on phones .modal-body just stacks both columns.
+  const hasSide = !!(entry.tasks || entry.breakdown);
+  panel.classList.toggle("has-side", hasSide);
   const modalNameHtml = (categoryKey === "dungeons-instances" && entry.abbr)
     ? `${entry.name} <span class="modal-title-abbr">(${entry.abbr})</span>`
     : entry.name;
@@ -3036,6 +3069,8 @@ function openModal(name, categoryKeyHint) {
     <div class="modal-title">${modalNameHtml}</div>
     <div class="modal-meta">${categoryName}</div>
     <button class="modal-pin-btn${isPinned(entry.name, categoryKey) ? " pinned" : ""}" id="modalPinBtn" type="button" data-pin-name="${escapeAttr(entry.name)}" data-pin-cat="${escapeAttr(categoryKey)}">${PIN_ICON_SVG}${isPinned(entry.name, categoryKey) ? "Pinned to Dailies" : "Pin to Dailies"}</button>
+    <div class="modal-body">
+    <div class="modal-main">
     <div class="modal-field">
       <div class="modal-field-label">${isMoldFarming ? "Location" : "Level"}</div>
       <div class="modal-field-value">${isMoldFarming ? (location || "—") : entry.level}</div>
@@ -3060,7 +3095,9 @@ function openModal(name, categoryKeyHint) {
       <div class="modal-field-value">${entry.notes}</div>
     </div>` : "")
     }
-    ${(entry.tasks || entry.breakdown) ? `
+    </div>
+    ${hasSide ? `
+    <div class="modal-side">
     <div class="modal-field">
       <div class="modal-field-label">${entry.breakdownLabel || "Task Breakdown"}</div>
       <div class="task-list">
@@ -3072,13 +3109,18 @@ function openModal(name, categoryKeyHint) {
           </div>
         `).join("")}
       </div>
+    </div>
     </div>` : ""}
+    ${(entry.link || entry.link2) ? `
+    <div class="modal-links">
     ${entry.link ? `
-    <a class="modal-link" href="${entry.link}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link)}</a>
+      <a class="modal-link" href="${entry.link}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link)}</a>
     ` : ""}
     ${entry.link2 ? `
-    <a class="modal-link" href="${entry.link2}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link2)}</a>
+      <a class="modal-link" href="${entry.link2}" target="_blank" rel="noopener">↗ View on ${linkDomain(entry.link2)}</a>
     ` : ""}
+    </div>` : ""}
+    </div>
   `;
   document.getElementById("modalBackdrop").classList.add("open");
   document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
